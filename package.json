@@ -1,0 +1,34 @@
+{
+  "name": "NazNuts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.12.5",
+    "@nuxtjs/pwa": "^3.3.5",
+    "core-js": "^3.8.3",
+    "gsap": "^3.6.0",
+    "normalize.css": "^8.0.1",
+    "nuxt": "^2.14.12",
+    "nuxt-i18n": "^6.19.0",
+    "v-shared-element": "^3.0.3",
+    "vue-js-modal": "^2.0.0-rc.6",
+    "vue2-perfect-scrollbar": "^1.5.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^3.4.2",
+    "@tailwindcss/postcss7-compat": "^2.0.2",
+    "autoprefixer": "^9.8.6",
+    "node-sass": "^5.0.0",
+    "postcss": "^7.0.35",
+    "sass-loader": "^10.1.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+    "tailwindcss-dir": "^4.0.0",
+    "tailwindcss-rtl": "^0.7.3"
+  }
+}
