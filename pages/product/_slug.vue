@@ -8,7 +8,7 @@
 
 <div class="product-image relative">
     <img :src="product.image" v-shared-element:[illusoryId(product.id)] class="w-full border border-gray-300" alt="">
-                                <span class="gm-main  bg-green-500 text-white text-sm font-semibold rounded-2xl px-3 py-2 right-2 bottom-2 absolute">100 {{$t('gm')}}</span>
+                                <span v-if="product.kind==0" class="gm-main  bg-green-500 text-white text-sm font-semibold rounded-2xl px-3 py-2 right-2 bottom-2 absolute">100 {{$t('gm')}}</span>
 </div>
 
 <div class="product-details mt-4 lg:mt-0 flex flex-col justify-between">
@@ -51,42 +51,46 @@
 </div>
 <div class="bottom flex flex-col mt-6 lg:mt-0">
     <div class="price flex items-center">
-<div class="quantity rounded-lg border-2 py-1 border-blue-500 flex items-center">
+<div class="quantity rounded-lg border-2  border-blue-500 flex items-center">
 
-<p class="px-4 cursor-pointer">
+<a href="#"  @click.prevent="decreaseAmount()" class="px-4 py-3 cursor-pointer" >
 <svg width="10" height="2" viewBox="0 0 10 2" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M9 1L1 1" stroke="#F2994A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
-</p>
-<p class="qty font-bold">0.1 <span>{{$t('kg')}}</span></p>
-<p class="px-4 cursor-pointer">
+</a>
+<p class="qty font-bold">{{amount}} <span v-if="product.kind==0">{{$t('kg')}}</span></p>
+<a href="#" @click.prevent="increaseAmount()" class="px-4 py-3 cursor-pointer">
     
 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M9 5H5M5 5H1M5 5V1M5 5V9" stroke="#F2994A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 
-</p>
+</a>
 
 </div>
 <div class="total ml-4">
-<p class="text-green-500 font-bold text-2xl"> <span class="text-gray-400 mx-2"> = </span> $ 7.00</p>
+<p class="text-green-500 font-bold text-2xl"> <span class="text-gray-400 mx-2"> = </span> ₪ {{product.price}}</p>
     </div>
 
     </div>
 
     <div class="addToCart">
-        <button class="font-semibold bg-blue-500 transition duration-300 hover:bg-blue-800 cursor-pointer p-2 px-6 py-3 text-lg flex text-white items-center rounded-lg mt-6 w-full lg:w-8/12 justify-center">
+        <button @click="addToCart" class="font-semibold bg-blue-500 transition duration-300 hover:bg-blue-800 cursor-pointer p-2 px-6 py-3 text-lg flex text-white items-center rounded-lg mt-6 w-full lg:w-8/12 justify-center">
            <!-- <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>  -->
-<svg width="34" class="mx-2" height="18" viewBox="0 0 34 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg v-if="!loading" width="34" class="mx-2" height="18" viewBox="0 0 34 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M19.9321 15.5233C19.9321 16.615 19.0117 17.5 17.8764 17.5C16.741 17.5 15.8207 16.615 15.8207 15.5233C15.8207 14.4315 16.741 13.5465 17.8764 13.5465C19.0117 13.5465 19.9321 14.4315 19.9321 15.5233Z" fill="white"/>
 <path d="M27.3328 15.5233C27.3328 16.615 26.4124 17.5 25.2771 17.5C24.1417 17.5 23.2213 16.615 23.2213 15.5233C23.2213 14.4315 24.1417 13.5465 25.2771 13.5465C26.4124 13.5465 27.3328 14.4315 27.3328 15.5233Z" fill="white"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M13.1344 1.05089C13.3606 0.707857 13.7537 0.5 14.1761 0.5H23.2213C23.9025 0.5 24.4548 1.03101 24.4548 1.68605C24.4548 2.34108 23.9025 2.87209 23.2213 2.87209H16.1212L18.8348 8.40698H24.7005L28.2435 1.18029C28.4471 0.764995 28.8817 0.5 29.3592 0.5H32.2666C32.9478 0.5 33.5 1.03101 33.5 1.68605C33.5 2.34108 32.9478 2.87209 32.2666 2.87209H30.1413L26.5983 10.0988C26.3947 10.5141 25.9601 10.7791 25.4826 10.7791H18.0526C17.5751 10.7791 17.1405 10.5141 16.9369 10.0988L13.0604 2.1918C12.8803 1.8244 12.9082 1.39391 13.1344 1.05089Z" fill="white"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M5.90984 3.15625C6.80617 3.15625 7.53279 3.8698 7.53279 4.75V6.875H9.69672C10.5931 6.875 11.3197 7.58855 11.3197 8.46875C11.3197 9.34895 10.5931 10.0625 9.69672 10.0625H7.53279V12.1875C7.53279 13.0677 6.80617 13.7812 5.90984 13.7812C5.0135 13.7812 4.28689 13.0677 4.28689 12.1875V10.0625H2.12295C1.22662 10.0625 0.5 9.34895 0.5 8.46875C0.5 7.58855 1.22662 6.875 2.12295 6.875H4.28689V4.75C4.28689 3.8698 5.0135 3.15625 5.90984 3.15625Z" fill="white"/>
 </svg>
-Add To Cart
+<svg v-if="loading" class="animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg> 
+{{$t('add_to_cart')}}
         </button>
     </div>
 
@@ -177,7 +181,7 @@ Add To Cart
 
                   </div>
                   <div class="addToCart" >
-                    <button>
+                    <button >
 
                      
 <svg width="29" height="15" viewBox="0 0 29 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -333,12 +337,19 @@ animation:reveal .4s ease-in-out forwards;
 </style>
 <script>
 export default {
+  data(){
+    return{
+ originalprice:0,
+ loading:false,
+ amount:0
+}
+  },
   async asyncData(context) {
     const id = context.params.slug
         try {
       // Using the nuxtjs/http module here exposed via context.app
       let product = await context.app.$axios.$get(
-        `https://naznuts.com/api/products/${id}/${context.app.i18n.locale}`
+        `/api/products/${id}/${context.app.i18n.locale}`
       )
       product = product[0];
       console.log(product);
@@ -346,9 +357,80 @@ export default {
     } catch (e) {
       context.error(e) // Show the nuxt error page with the thrown error
     }
-  } ,methods:{
+  } ,created(){
+    this.$store.dispatch('recently/addRecently',this.product.id);
+    if(this.product.kind==0){
+  this.amount = 0.1;
+}else{
+  this.amount = 1;
+}
+console.log(this.amount);
+     this.originalprice = this.product.price;
+    },methods:{
     illusoryId(id){
       return "product_"+id;
+    },
+  
+    increaseAmount(){
+      // alert("rafay");
+
+          if(this.amount != this.product.maximum){
+if(this.product.kind == 1){
+  this.amount = this.amount + 1;
+this.product.price =  (Math.round(this.amount * this.originalprice)).toFixed(0);
+
+}else{
+  this.amount = (parseFloat(this.amount) + parseFloat("0.1")).toFixed(1);
+  this.product.price =  (this.originalprice / 100) * (this.amount * 1000);
+this.product.price =  (Math.round(this.product.price * 100) / 100).toFixed(0);
+}
+    }
+    },
+    decreaseAmount(){
+          if(this.product.kind == 1){
+      if(this.amount != 1){
+          this.amount = this.amount - 1;
+this.product.price =  (Math.round(this.amount * this.originalprice)).toFixed(0);
+
+}
+  }else{
+  if(this.amount != 0.1){
+this.amount = (parseFloat(this.amount) - parseFloat("0.1")).toFixed(1);
+this.product.price =  (this.originalprice / 100) * (this.amount * 1000);
+this.product.price =  (Math.round(this.product.price * 100) / 100).toFixed(0);
+}
+  }
+    },
+    addToCart(){
+      document.querySelector('.addToCart button').setAttribute('disabled',true);
+      this.loading = true;
+
+     const add = {'originalprice':this.originalprice}
+Object.entries(add).forEach(([key,value]) => { this.product[key] = value })
+this.$store.dispatch('cart/addToCart',{id:this.product.id,amount:this.amount,image:this.product.image,originalprice:this.originalprice,kind:this.product.kind,title:this.product.name,maximum:this.product.maximum,type:"product",price:this.product.price}).then(res=>{
+this.showToast();
+this.loading = false;
+      document.querySelector('.addToCart button').removeAttribute('disabled');
+
+}).catch(e=>{
+  this.loading = false;
+  document.querySelector('.addToCart button').removeAttribute('disabled');
+      if(!e.data){
+this.$toast.show(`Product Already Exists`,{type:'error',duration:3000})
+      }
+})
+
+    //  this.$store.dispatch('cart/addToCart',)
+    },
+    showToast(){
+           this.$toast.show(`
+     <svg width="34" class="mx-2" height="18" viewBox="0 0 34 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M19.9321 15.5233C19.9321 16.615 19.0117 17.5 17.8764 17.5C16.741 17.5 15.8207 16.615 15.8207 15.5233C15.8207 14.4315 16.741 13.5465 17.8764 13.5465C19.0117 13.5465 19.9321 14.4315 19.9321 15.5233Z" fill="white"/>
+<path d="M27.3328 15.5233C27.3328 16.615 26.4124 17.5 25.2771 17.5C24.1417 17.5 23.2213 16.615 23.2213 15.5233C23.2213 14.4315 24.1417 13.5465 25.2771 13.5465C26.4124 13.5465 27.3328 14.4315 27.3328 15.5233Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M13.1344 1.05089C13.3606 0.707857 13.7537 0.5 14.1761 0.5H23.2213C23.9025 0.5 24.4548 1.03101 24.4548 1.68605C24.4548 2.34108 23.9025 2.87209 23.2213 2.87209H16.1212L18.8348 8.40698H24.7005L28.2435 1.18029C28.4471 0.764995 28.8817 0.5 29.3592 0.5H32.2666C32.9478 0.5 33.5 1.03101 33.5 1.68605C33.5 2.34108 32.9478 2.87209 32.2666 2.87209H30.1413L26.5983 10.0988C26.3947 10.5141 25.9601 10.7791 25.4826 10.7791H18.0526C17.5751 10.7791 17.1405 10.5141 16.9369 10.0988L13.0604 2.1918C12.8803 1.8244 12.9082 1.39391 13.1344 1.05089Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M5.90984 3.15625C6.80617 3.15625 7.53279 3.8698 7.53279 4.75V6.875H9.69672C10.5931 6.875 11.3197 7.58855 11.3197 8.46875C11.3197 9.34895 10.5931 10.0625 9.69672 10.0625H7.53279V12.1875C7.53279 13.0677 6.80617 13.7812 5.90984 13.7812C5.0135 13.7812 4.28689 13.0677 4.28689 12.1875V10.0625H2.12295C1.22662 10.0625 0.5 9.34895 0.5 8.46875C0.5 7.58855 1.22662 6.875 2.12295 6.875H4.28689V4.75C4.28689 3.8698 5.0135 3.15625 5.90984 3.15625Z" fill="white"/>
+</svg>
+     Added To Cart`,{type:'info',duration:3000});
     }
   }
 

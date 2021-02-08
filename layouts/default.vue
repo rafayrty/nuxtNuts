@@ -1,8 +1,10 @@
 <template>
   <div :dir="$dir()">
     <HeaderMain/>
+
     <Nuxt />
     <Footer />
+
   </div>
 </template>
 
@@ -64,6 +66,20 @@ html {
 </style>
 <script>
 export default {
+  data () {
+    return {
+      categories: []
+    }
+  },
+  computed:{
+
+  },
+  created(){
+    if(this.$cookies.get('user')){
+      this.$store.dispatch('auth/sync',this.$cookies.get('user'));
+    }
+    
+  },
   head () {
       return {
             htmlAttrs: {
@@ -71,6 +87,11 @@ export default {
             },
             
         }
+  },
+  async fetch(){
+    this.categories = this.$nuxt.context.store.state.categories;
+        console.log(this.categories);
+  
   }
 }
 </script>

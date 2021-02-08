@@ -19,6 +19,8 @@ export default {
     title: 'NazNuts',
     meta: [
       { charset: 'utf-8' },
+      {name:'apple-mobile-web-app-status-bar-style',content:'#79c143'},
+      {name:'theme-color',content:'#79c143'},
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' }
     ],
@@ -40,8 +42,10 @@ export default {
       '~/plugins/axios',
     '~/plugins/i18n.js',
     '~/plugins/vue-perfect-scrollbar.js',
-    '~plugins/vue-js-modal.js'
-  ],
+    '~/plugins/vue-js-modal.js',
+  {src:'./plugins/vue-google-oauth2',ssr: false},
+  { src: '~/plugins/vuex-persist', ssr: false }
+    ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -61,6 +65,9 @@ export default {
 
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    'cookie-universal-nuxt',
+    '@nuxtjs/toast',
+
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
   ],
@@ -95,8 +102,8 @@ export default {
     vueI18nLoader: true,
     lazy: true,
     langDir: 'lang/',
-    defaultLocale: 'en',
-    vueI18n: { fallbackLocale: 'en' },
+    defaultLocale: 'he',
+    vueI18n: { fallbackLocale: 'he' },
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -109,6 +116,9 @@ export default {
     manifest: {
       lang: 'en'
     }
+  },
+  router: {
+    middleware: 'authenticated'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

@@ -1,32 +1,19 @@
 <template>
-       <modal name="account-modal" :width="'400'" :height="'auto'" :adaptive="true">
-<div class="forms-container py-8  w-9/12 mx-auto">
+<div class="main-modals">
+  <v-dialog />
 
+       <modal name="account-modal" @before-close="closed" @opened="opened" :classes="['main-modal-window']" :width="'600'" :height="'auto'" :scrollable='true' :adaptive="true" >
+
+  <perfect-scrollbar ref="scroll">
+
+<div class="forms-container py-8  w-9/12 mx-auto" style="direction:rtl;">
 <!-- Login -->
-<div class="form ">
- <form action="">
- <div class="form-group flex flex-col mt-4">
-     <label for="email" class="font-semibold text-blue-500">Email Address</label>
-     <input type="email" name="email" class="outline-none focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent py-2 border border-gray-200 px-2 bg-blue-100" placeholder="Jenny@dummy.com" id="email">
- </div>
- <div class="form-group flex flex-col mt-4">
-     <label for="password" class="font-semibold text-blue-500">Password</label>
-     <input type="password" class="outline-none py-2 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent border border-gray-200 px-2 bg-blue-100" name="password" placeholder="*****" id="password">
- </div>
-<div class="bottom flex justify-between items-center  mt-4">
-<div class="remember">
-      <label class="inline-flex items-center ">
-                <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600" checked><span class="ml-2 text-blue-500">Remember Me</span>
-            </label>
-</div>
-<a href="#" class="text-blue-500 underline">
-    Forgot Password
-</a>
-</div>
+<div class="form " style="direction:rtl;">
+<transition name="slide-fade" mode="out-in">
+<Login @close-modal="hide()" v-if="login" />
+<Register v-if="register"/>
+</transition>
 
- <div class="submit my-4">
-     <input type="submit" value="Login" class="bg-green-500 w-full hover:bg-blue-500 text-white cursor-pointer transition duration-300 font-bold py-2 text-lg">
- </div>
   <div class="social-logins flex justify-center my-2">
      <div class="apple mx-2">
          <a href="#">
@@ -39,7 +26,7 @@
          </a>
      </div>
        <div class="google mx-2">
-         <a href="#">
+         <a href="#" @click="googleLogin()">
            
 
 <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,38 +44,170 @@
          </a>
      </div>
   <div class="facebook mx-2">
-         <a href="#">
+       <client-only>
+    <v-facebook-login app-id="3200003586893171" :logo-style="{'margin-right':'0','margin':'.18rem 0;'}" :text-style="{'display':'none'}">
+    </v-facebook-login>
+  </client-only> 
+         <a href="#" @click="facebookLogin()">
            
-<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="44" height="44" rx="4" fill="#1976D2"/>
 <path d="M13.7267 11H30.0872C31.591 11 32.814 12.2229 32.814 13.7267V30.0872C32.814 31.591 31.591 32.814 30.0872 32.814L25.997 32.814V25.3154H28.0421L29.4055 21.907H25.997V19.1802C25.997 18.4885 26.5131 18.4925 27.181 18.4976C27.2397 18.4981 27.2996 18.4985 27.3604 18.4985H28.7238V15.0901H25.997C23.7379 15.0901 21.9069 16.9211 21.9069 19.1802V21.907H19.1802V25.3154H21.9069V32.814L13.7267 32.814C12.2229 32.814 11 31.591 11 30.0872V13.7267C11 12.2229 12.2229 11 13.7267 11Z" fill="white"/>
-</svg>
+</svg> -->
 
 
          </a>
      </div>
  </div>
  <hr class="bg-gray-500 mt-4" style="height:0.05rem;">
- <a href="#" class="text-lg block mt-4 text-center text-green-500 font-bold">Register</a>
- </form>
+ <a href="#" class="text-lg block mt-4 text-center text-green-500 font-bold" v-if="login" @click.prevent="openRegister()">Register</a>
 
+ <a href="#" class="text-lg block mt-4 text-center text-green-500 font-bold" v-if="register" @click.prevent="openLogin()">Login</a>
 
 </div>
+
 </div>
+
+
+</perfect-scrollbar>
+
+
 
 
 
     </modal>
+    </div>
+
 </template>
+<style>
+.vm--container{
+      direction: ltr !important;
+}
+.vue-dialog-content-title{
+  font-size:1.5rem;
+  text-align:center;
+}
+.vue-dialog-button{
+  font-weight:600
+}
+.vue-dialog-button:first-child{
+  @apply text-red-500;
+}
+
+@media only screen and (max-height:750px){
+  .ps{
+    max-height:100vh;
+    padding-bottom:3rem;
+    overflow-y:scroll;
+  }
+  .main-modal-window{
+    max-height:90vh !important;
+  }
+}
+</style>
 <script>
+
 export default {
+    data(){
+        return{
+        login:true,
+        register:false,
+        }
+    },
+       components: {
+      VFacebookLogin: () =>
+        process.client ? import('vue-facebook-login-component') : null,
+    },
     methods: {
         show () {
+          if(this.$store.getters['auth/isLoggedIn']){
+            this.$modal.show('dialog', {
+  title: 'Account Actions',
+  text: 'Click Buttons Below To Proceed',
+  buttons: [
+    {
+      title: 'Logout',
+      handler: () => {
+        this.$modal.hide('dialog')
+        this.logOut();
+      }
+    },
+    {
+      title: 'Orders',
+      handler: () => {
+        alert('Like action')
+      }
+    },
+    {
+      title: 'Address',
+      handler: () => {
+        alert('Repost action')
+      }
+    },
+    {
+      title: 'Profile',
+      handler: () => {
+        alert('Repost action')
+      }
+    }
+  ]
+})
+
+          }else{
             this.$modal.show('account-modal');
+          }
         },
         hide () {
             this.$modal.hide('account-modal');
-        }
+        },  logOut(){
+      this.$store.dispatch('auth/logOut');
+    },openLogin(){
+              this.$refs.scroll.$el.scrollTop = 0;
+
+            this.login = true;
+            this.register = false;
+        },openRegister(){
+              this.$refs.scroll.$el.scrollTop = 0;
+
+             this.register = true;
+             this.login = false;
+        },
+        opened(){
+// document.querySelector('body').style.overflowY = "hidden";
+            if(this.$i18n.locale=='he' || this.$i18n.locale=='ar'){
+              document.querySelector('.forms-container').style.opacity = "1";
+              document.querySelector('.forms-container').style.direction = "rtl";
+            }else{
+      document.querySelector('.forms-container').style.opacity = "1";
+   document.querySelector('.forms-container').style.direction = "ltr";
+            }
+        },
+        closed(){
+            // document.querySelector('body').style.overflowY = "auto";
+
+        },
+       async googleLogin(){
+try {
+        const googleUser = await this.$gAuth.signIn();
+        if (!googleUser) {
+          return null;
+        }console.log("googleUser",googleUser)
+        console.log("googleUser", googleUser.Es.bT,googleUser.Es.dR,googleUser.Es.kt);
+        // console.log("getId", googleUser.getId());
+        // console.log("getBasicProfile", googleUser.getBasicProfile());
+        // console.log("getAuthResponse", googleUser.getAuthResponse());
+        console.log(
+          "getAuthResponse",
+          this.$gAuth.GoogleAuth.currentUser.get().getAuthResponse()
+        );
+        this.isSignIn = this.$gAuth.isAuthorized;
+      } catch (error) {
+        //on fail do something
+        console.error(error);
+        return null;
+      }
+        },
+        
     },
     mount () {
         this.show()

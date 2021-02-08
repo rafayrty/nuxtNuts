@@ -1,7 +1,7 @@
 <template>
     <header class="bg-green-500  lg:pb-10">
-<DesktopMenu @open-modal="openModal()" @cart-modal="openCart()"/>
-<MobileMenu @open-modal="openModal()" @cart-modal="openCart()"/>
+<DesktopMenu @open-modal="openModal()" @cart-modal="openCart()" />
+<MobileMenu @open-modal="openModal()" @cart-modal="openCart()" />
 <Main ref="accountmodal"/>
 <Cart ref="cartmodal"/>
 
@@ -24,20 +24,15 @@
 </style>
 <script>
 export default {
-  data(){
-    return{
-    categories:[]
-    }
-  },
- async fetch(){
-           this.categories =  await this.$axios.$get(`/api/categories/${this.$i18n.locale}`)
-            .then(data=>{
-              console.log(data);
-              return data;
-            }).catch(e=>{
-              context.error(e);
-            })
-  },
+//  async fetch(){
+//            this.categories =  await this.$axios.$get(`/api/categories/${this.$i18n.locale}`)
+//             .then(data=>{
+//               console.log(data);
+//               return data;
+//             }).catch(e=>{
+//               context.error(e);
+//             })
+//   },
   created(){
 
 },
