@@ -49,7 +49,7 @@
 
           <div class="right mt-8 md:mt-0 col-start-5 col-end-7">
 
-            <div class="banner rounded h-full w-60 h-24 md:w-full md:h-full" style="background:#0F729D">
+            <div class="banner rounded w-60 h-24 md:w-full md:h-full" style="background:#0F729D">
             </div>
 
 
@@ -68,7 +68,7 @@
         <div class="display-products mt-10">
           <div class="display-title">
             <h3>{{$t('fresh')}}</h3>
-            <p><a href="#">{{$t('view')}} ></a></p>
+            <p><nuxt-link :to="localePath(`/fresh`)">{{$t('view')}} ></nuxt-link></p>
           </div>
           <hr class="bg-green-500" style="height:0.05rem;margin-top: -0.1rem;">
           <div class="products-container" v-if="freshToday.length">

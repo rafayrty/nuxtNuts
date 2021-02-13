@@ -2,12 +2,12 @@
     
             <form action="" @submit.prevent="login">
  <div class="form-group flex flex-col mt-4">
-     <label for="email" class="font-semibold text-blue-500">Email Address</label>
-     <input type="email" v-model="email" name="email" class="outline-none focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent py-2 border border-gray-200 px-2 bg-blue-100" placeholder="Jenny@dummy.com" id="email">
+     <label for="email" >Email Address</label>
+     <input type="email" v-model="email" name="email" placeholder="Jenny@dummy.com" id="email">
  </div>
  <div class="form-group flex flex-col mt-4">
      <label for="password" class="font-semibold text-blue-500">Password</label>
-     <input type="password" v-model="password" class="outline-none py-2 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent border border-gray-200 px-2 bg-blue-100" name="password" placeholder="*****" id="password">
+     <input type="password" v-model="password"  name="password" placeholder="*****" id="password">
  </div>
 <div class="bottom flex justify-between items-center  mt-4">
 <div class="remember">

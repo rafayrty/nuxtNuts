@@ -1,4 +1,4 @@
-# NazNuts
+# Frontend Built On Nuxt JS Built For [NAZADV](https://naznuts.com)
 
 ## Build Setup
 
@@ -17,4 +17,4 @@ $ npm run start
 $ npm run generate
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+For detailed explanation on how things work, check out [NAZADV](https://nazadv.com).

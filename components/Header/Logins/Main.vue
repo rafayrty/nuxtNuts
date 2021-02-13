@@ -120,42 +120,9 @@ export default {
     },
     methods: {
         show () {
-          if(this.$store.getters['auth/isLoggedIn']){
-            this.$modal.show('dialog', {
-  title: 'Account Actions',
-  text: 'Click Buttons Below To Proceed',
-  buttons: [
-    {
-      title: 'Logout',
-      handler: () => {
-        this.$modal.hide('dialog')
-        this.logOut();
-      }
-    },
-    {
-      title: 'Orders',
-      handler: () => {
-        alert('Like action')
-      }
-    },
-    {
-      title: 'Address',
-      handler: () => {
-        alert('Repost action')
-      }
-    },
-    {
-      title: 'Profile',
-      handler: () => {
-        alert('Repost action')
-      }
-    }
-  ]
-})
-
-          }else{
+    
             this.$modal.show('account-modal');
-          }
+
         },
         hide () {
             this.$modal.hide('account-modal');

@@ -65,7 +65,7 @@
 
   
 
-          <div class="account" @click="openAccount()">
+          <div v-if="!isLoggedIn" class="account" @click="openAccount()">
 <a href="#">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="24" cy="24" r="17" fill="#E4F3D9" />
@@ -77,6 +77,19 @@
                 fill="#79C143" />
             </svg>
 </a>
+          </div>
+              <div v-if="isLoggedIn" class="account">
+<nuxt-link :to="`${$i18n.locale == 'he' ? '' : $i18n.locale}/account/profile`">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="17" fill="#E4F3D9" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M21.8571 17.8125C21.8571 19.0206 22.8165 20 24 20C25.1835 20 26.1429 19.0206 26.1429 17.8125C26.1429 16.6044 25.1835 15.625 24 15.625C22.8165 15.625 21.8571 16.6044 21.8571 17.8125ZM24 13C21.3964 13 19.2857 15.1546 19.2857 17.8125C19.2857 20.4704 21.3964 22.625 24 22.625C26.6036 22.625 28.7143 20.4704 28.7143 17.8125C28.7143 15.1546 26.6036 13 24 13Z"
+                fill="#79C143" />
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M28.7143 27.875H19.2857C18.3389 27.875 17.5714 28.6585 17.5714 29.625C17.5714 30.5915 18.3389 31.375 19.2857 31.375H28.7143C29.6611 31.375 30.4286 30.5915 30.4286 29.625C30.4286 28.6585 29.6611 27.875 28.7143 27.875ZM19.2857 25.25C16.9188 25.25 15 27.2088 15 29.625C15 32.0412 16.9188 34 19.2857 34H28.7143C31.0812 34 33 32.0412 33 29.625C33 27.2088 31.0812 25.25 28.7143 25.25H19.2857Z"
+                fill="#79C143" />
+            </svg>
+</nuxt-link>
           </div>
 
         <div @click="openCart()" class="cart">
@@ -363,6 +376,9 @@ export default {
 
         }
     },computed:{
+         isLoggedIn(){
+return this.$store.getters['auth/isLoggedIn'];
+    },
 availableLocales () {
     return this.$i18n.locales.filter(i => i.code !== this.$i18n.locale)
 },

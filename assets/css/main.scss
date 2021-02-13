@@ -13,6 +13,16 @@ body{
     overflow-x:hidden;
 }
 //Global CSS
+.form-group{
+    input[type='text'],input[type='email'],input[type='password'],input[type='tel']{
+        @apply outline-none  py-2 border border-gray-200 px-2 bg-blue-100;
+    }
+    label{
+        @apply font-semibold text-blue-500;
+    }
+}
+
+
 
 // Menu CSS Starts
 .hero{

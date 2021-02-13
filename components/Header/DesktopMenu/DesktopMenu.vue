@@ -198,7 +198,7 @@
 
 
             </div>
-            <div @click="openAccount()"
+            <div v-if="!isLoggedIn" @click.prevent="openAccount()"
               class="user mx-6  bg-green-100 cursor-pointer hover:bg-blue-100 transition duration-200 rounded-full p-2 h-10 w-10 flex justify-center items-center">
               <a href="#">
 
@@ -212,6 +212,19 @@
                 </svg>
               </a>
             </div>
+<nuxt-link v-if="isLoggedIn" :to="`${$i18n.locale == 'he' ? '' : $i18n.locale}/account/profile`">
+
+<div  class="user mx-6  bg-green-100 cursor-pointer hover:bg-blue-100 transition duration-200 rounded-full p-2 h-10 w-10 flex justify-center items-center">
+                <svg width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M6.85714 4.8125C6.85714 6.02062 7.81653 7 9 7C10.1835 7 11.1429 6.02062 11.1429 4.8125C11.1429 3.60438 10.1835 2.625 9 2.625C7.81653 2.625 6.85714 3.60438 6.85714 4.8125ZM9 0C6.39637 0 4.28571 2.15463 4.28571 4.8125C4.28571 7.47037 6.39637 9.625 9 9.625C11.6036 9.625 13.7143 7.47037 13.7143 4.8125C13.7143 2.15463 11.6036 0 9 0Z"
+                    fill="#79C143" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M13.7143 14.875H4.28571C3.33894 14.875 2.57143 15.6585 2.57143 16.625C2.57143 17.5915 3.33894 18.375 4.28571 18.375H13.7143C14.6611 18.375 15.4286 17.5915 15.4286 16.625C15.4286 15.6585 14.6611 14.875 13.7143 14.875ZM4.28571 12.25C1.91878 12.25 0 14.2088 0 16.625C0 19.0412 1.91878 21 4.28571 21H13.7143C16.0812 21 18 19.0412 18 16.625C18 14.2088 16.0812 12.25 13.7143 12.25H4.28571Z"
+                    fill="#79C143" />
+                </svg>
+            </div>
+</nuxt-link>
 
           </div>
 
@@ -377,6 +390,9 @@ export default {
       showDeskCat:false
     }
   }, computed:{
+    isLoggedIn(){
+return this.$store.getters['auth/isLoggedIn'];
+    },
       firstName(){
      if(this.$store.getters['auth/user']){
  return this.$store.getters['auth/user'].first_name;
