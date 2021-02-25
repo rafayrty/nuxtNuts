@@ -12,7 +12,7 @@ export default {
     height: '5px'
   },
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
+  target: 'server',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -43,8 +43,10 @@ export default {
     '~/plugins/i18n.js',
     '~/plugins/vue-perfect-scrollbar.js',
     '~/plugins/vue-js-modal.js',
-  {src:'./plugins/vue-google-oauth2',ssr: false},
-  { src: '~/plugins/vuex-persist', ssr: false }
+   "~/plugins/vue-maps",
+   {src:'./plugins/vue-google-oauth2',ssr: false},
+   { src: '~/plugins/vuex-persist', ssr: false },
+   {src:'~/plugins/overlay-loader',ssr:false}
     ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -123,5 +125,6 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    transpile: [/^vue2-google-maps($|\/)/]
   }
 }

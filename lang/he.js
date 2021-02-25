@@ -133,7 +133,7 @@ export default {
       "baskets": "סלי מתנות",
       "remove": "להסיר",
       "coupon": "קוד קופון",
-      "apply": "להגיש מועמדות",
+      "apply": "לִפְנוֹת",
       "summary": "סיכום הזמנה",
       "total": "סה\"כ",
       "subtotal": "רמה חלקית",
@@ -171,6 +171,8 @@ export default {
       "send": "לשלוח",
       "pay": "שלם עכשיו",
       "message": "הודעה",
+      "cities":"ערים",
+      "select_city":"בחר עיר",
       "message_placeholder": "אנא ספק הודעה מפורטת עם הבעיה או השאילתה שלך ..."
     },
     "payment": {

@@ -3,18 +3,24 @@
     export default {
         data(){
             return{
-                selectedBasket:false,
-                baskets:[]
+                selectedWrapping:false,
+                wrappings:[]
             }
         },
         watch:{
-          selectedBasket(){
-              this.$toast.show('Basket Selected Successfully',{type:'success',duration:3000})
-         this.$emit('basket-added');
+          selectedWrapping(){
+                            if(this.selectedWrapping!=false){
+              this.$toast.show('Wrapping Selected Successfully',{type:'success',duration:3000})
+                            }
 }
         },
          async fetch() {
-      this.baskets = await this.$axios.$get(`/api/baskets/${this.$i18n.locale}`)
+      this.wrappings = await this.$axios.$get(`/api/baskets/wrappings/${this.$i18n.locale}`)
+    },
+    methods:{
+        addToCart(){
+            this.$emit('add-to-cart');
+        }
     }
     }
     </script>
@@ -24,42 +30,59 @@
     width: 100%;
     cursor:pointer;
     }
+    .tab3 .button-add-to-cart{
+    text-align:center;
+    margin-bottom:1rem;
+}
+.tab3 .button-add-to-cart button{
+     cursor: pointer;
+    padding: .9rem 3rem;
+    color: #fff;
+    outline:none;
+    background: #bdbdbd;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 30px;
+    box-shadow: 0 0 0 10px #f2f2f2;
+    transition:.3s ease-in-out;
+}
+.tab3 .button-add-to-cart button.active-cart{
+        background: #79c143;
+        box-shadow: 0 0 0 10px #def0d0;
+        animation:scaled .3s ease-in-out forwards;
+
+}
+@keyframes scaled{
+    0%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.2)
+    }
+    100%{
+        transform:scale(1);
+    }
+}
+
     </style>
     <template>
 
-<div class="tab1 my-24">
+<div class="tab3 my-24">
 <div class="container">
+<h1 class="font-bold text-blue-500 text-center text-2xl">{{$t('baskets.delightful')}}</h1>
+<div class="button-add-to-cart mt-8">
+    <button :class="{'active-cart':selectedWrapping}" @click="addToCart()" >{{$t('add_to_cart')}}</button>
+</div>
+<div class="wrappings my-4 mt-4  grid w-7/12 lg:w-full mx-auto gap-x-6 lg:gap-x-6 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
 
-<h1 class="font-bold text-blue-500 text-center text-2xl">{{$t('baskets.preferred')}}</h1>
-<p class="text-red-500 text-center font-semibold">{{$t('baskets.look')}}</p>
 
-<div class="wrappings my-4 mt-16  grid w-7/12 lg:w-full mx-auto gap-x-6 lg:gap-x-6 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
+  <div v-for="wrapping in wrappings" :key="wrapping.id" class="wrapping relative border-gray-500 hover:shadow-2xl transition duration-300 border pt-6 my-6 lg:py-4 lg:pb-4 rounded-xl" >
+<input type="radio" v-model="selectedWrapping" :value="wrapping.id"  name="wrappingSelected" class="radio-btn">
 
-
-  <div v-for="basket in baskets" :key="basket.id" class="basket relative border-gray-500 hover:shadow-2xl transition duration-300 border pt-6 my-6 lg:py-6 lg:pb-12 rounded-xl" >
-<input type="radio" v-model="selectedBasket" :value="basket.basket_id"  name="basketSelected" class="radio-btn">
-
-  <img :src="basket.image" alt="">
- <div class="basket-info bg-green-500 rounded-full w-full lg:w-9/12 mx-auto">
-
-   <div class="basket-info-header rounded-xl text-white" style="background:#F2994A;">
-       <div class="top flex px-4 text-sm lg:text-md pt-2 justify-between items-center">
-           <p>{{$t('baskets.max')}}</p>
-           <p class="font-semibold lg:text-lg">{{basket.item_limit}}</p>
-
-       </div>
-           <div class="bottom flex text-sm lg:text-md mt-2 lg:mt-0 px-4 pb-2 justify-between items-center">
-           <p>{{$t('baskets.basket_price')}}</p>
-           <p class="font-bold lg:text-lg">₪ {{basket.price}}</p>
-
-       </div>
-   
-   <div class="basket-name  bg-green-500 rounded-b-lg text-center py-1 text-bold">
-       {{basket.basket_name}}
-   </div>
-
-   </div>
-
+  <img :src="wrapping.image" alt="">
+   <div class="wrapping-name mx-3 mt-4  bg-green-500 text-white  text-center py-1 font-bold">
+       {{wrapping.name}}
   </div>
   </div>
  
@@ -76,4 +99,5 @@
     </div>
         
     </template>
+   
     

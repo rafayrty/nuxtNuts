@@ -1,39 +1,12 @@
 <template>
-           <modal  @opened="opened" @before-close="closed" name="cart-modal" class="rounded-xl"  :classes="['cart-modal-window']" :width="'1000'" :height="'auto'"  :adaptive="true">
+    <div class="cart-page-container mt-4">
+<h1 class="text-3xl font-bold">{{$t('cart.my')}} <span class="text-sm text-gray-400 font-medium">({{totalItems}} {{$t('cart.items')}}) </span></h1>
+<p class="mt-4">{{$t('cart.estimated')}}</p>
+<div class="items-list mt-6">
 
-<div class="cart-modal " >
-<div class="cart-header py-4 px-6" style="background:#E4F3D9;">
-<div class="close flex justify-end mb-4" @click="hide()">
-    <a href="#" >
-<svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="18.5" cy="18.5" r="18.5" fill="white"/>
-<path d="M23 14L14 23M14 14L23 23" stroke="#BDBDBD" stroke-width="3.37959" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</a>
 
-</div>
-<div class="sub-total flex items-center justify-between lg:w-10/12 xl:9/12 mx-auto">
-    <h1 class="font-bold text-xl">{{$t('cart.subtotal')}}</h1>
-    <h1 class="font-bold text-xl text-blue-500">₪ {{totalPrice}}</h1>
-</div>
 
-</div>
-<div class="cart-content lg:w-10/12 xl:9/12 mx-auto" >
-<div class="cart-content-header flex justify-between  mt-4 items-center">
-
-<p class="text-blue-500 font-semibold text-lg px-6">( {{totalItems}} {{$t('cart.items')}} )</p>
-<div class="checkout flex flex-end px-6">
-    <button @click="toCheckout" class="checkout bg-blue-500 px-6 py-2 font-bold rounded-lg text-white flex hover:bg-blue-800 ">
-        {{$t('cart.checkout')}}
-    </button>
-</div>
-</div>
-
-<div class="cart-items pb-12">
-<perfect-scrollbar>
-  <transition-group name="list-complete" tag="div">
-
-  <div class="cart-item mt-4 mx-6 p-4 rounded-xl" v-for="cartItem in cartItems" :key="cartItem.name">
+  <div class="cart-item mt-4 p-4 rounded-xl" v-for="cartItem in cartItems" :key="cartItem.name">
      <div class="cart-item-main">
 
      <div class="left cart-item-grid">
@@ -95,9 +68,7 @@
      </div>
 
  </div>
-
-  </transition-group>
-
+<!--Baskets -->
   <div class="cart-item mt-4 mx-6 p-4 rounded-xl" v-for="basketItem in basketItems" :key="basketItem.title">
      <div class="basket-item-main">
 
@@ -164,30 +135,78 @@
  </div>
 
 
-
-
-
-
-
-  
-
-
-
-
-</perfect-scrollbar>
 </div>
 
+    </div>
 
-</div>
 
-
-</div>
-
-</modal>
 </template>
+<style lang="scss" scoped>
+
+.cart-page-container .cart-item{
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+}
+.cart-page-container .cart-item .delete-btn button{
+    transition:.3s ease;
+    filter: drop-shadow(0px 6px 10px rgba(229, 40, 54, 0.2));
+}
+.cart-page-container .cart-item .delete-btn button:hover{
+        filter: drop-shadow(0px 0px 0px rgba(229, 40, 54, 0.2));
+
+}
+.ps{
+    max-height:80vh;
+    padding-bottom:3rem;
+    overflow-y:scroll;
+}
+.cart-page-container .close a{
+    transition:.3s ease;
+}
+.cart-page-container .close a:hover{
+    transform:rotate(90deg);
+
+}
+.cart-page-container .cart-item-grid{
+    display:grid;
+    grid-template-columns:.32fr .8fr 1fr .4fr;
+    grid-template-areas:"img text . delete"
+                        "img quantity . delete "
+}
+.cart-page-container .delete-btn{
+    grid-area:delete;
+}
+.cart-page-container .cart-item-image{
+    grid-area:img;
+}
+.cart-page-container .cart-item-details{
+    grid-area:text;
+}
+.cart-page-container .bottom{
+    margin-left:1rem;
+    grid-area:quantity;
+}
+.cart-page-container .bottom:dir(rtl){
+    margin-left:0rem;
+    margin-right:1rem;
+}
+
+.cart-page-container .total{
+    grid-area:price;
+}
+.cart-page-container-window{
+    border-radius:20px !important;
+}
+.cart-item:not(:first-child){
+    margin-top:2rem;
+}
+</style>
 <script>
 export default {
-    computed:{
+    layout:'cart',
+      transition:{
+        name:'main'
+    },
+        computed:{
         cartItems(){
            return this.$store.getters['cart/addedProducts'];
         },
@@ -204,29 +223,7 @@ export default {
 
         }
     },
-    methods: {
-        show () {
-            this.$modal.show('cart-modal');
-        },
-        hide () {
-            this.$modal.hide('cart-modal');
-        },
-        toCheckout(){
-            this.hide();
-    this.$router.push({path: this.localePath('/cart')});
-
-        },
-        opened(){
-         document.querySelector('body').style.overflowY = "hidden";
-            if(this.$i18n.locale=='he' || this.$i18n.locale=='ar'){
-                                document.querySelector('.cart-modal').style.opacity = "1";
-                document.querySelector('.cart-modal').style.direction = "rtl";
-            }else{
-      document.querySelector('.cart-modal').style.opacity = "1";
-   document.querySelector('.cart-modal').style.direction = "ltr";
-            }
-            
-        },
+        methods: {
         increaseAmount(id){
          this.$store.dispatch('cart/addAmountProduct',id);
         },
@@ -246,95 +243,7 @@ export default {
             this.$store.dispatch('cart/deleteBasket',id);
             this.$toast.show('Basket Has Been Removed From Cart',{type:'error',duration:3000});
         },
-        closed(){
-            document.querySelector('body').style.overflowY = "auto";
 
-        }
     },
 }
 </script>
-
-<style scoped>
-
-.cart-modal .cart-item{
-    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
-}
-.cart-modal .cart-item .delete-btn button{
-    transition:.3s ease;
-    filter: drop-shadow(0px 6px 10px rgba(229, 40, 54, 0.2));
-}
-.cart-modal .cart-item .delete-btn button:hover{
-        filter: drop-shadow(0px 0px 0px rgba(229, 40, 54, 0.2));
-
-}
-.ps{
-    max-height:80vh;
-    padding-bottom:3rem;
-    overflow-y:scroll;
-}
-.cart-modal .close a{
-    transition:.3s ease;
-}
-.cart-modal .close a:hover{
-    transform:rotate(90deg);
-
-}
-.cart-modal .cart-item-grid{
-    display:grid;
-    grid-template-columns:.32fr .8fr 1fr .4fr;
-    grid-template-areas:"img text . delete"
-                        "img quantity . delete "
-}
-.cart-modal{
-    transition:.3s ease;
-    opacity:0;
-}
-.cart-modal .delete-btn{
-    grid-area:delete;
-}
-.cart-modal .cart-item-image{
-    grid-area:img;
-}
-.cart-modal .cart-item-details{
-    grid-area:text;
-}
-.cart-modal .bottom{
-    margin-left:1rem;
-    grid-area:quantity;
-}
-.cart-modal .bottom:dir(rtl){
-    margin-left:0rem;
-    margin-right:1rem;
-}
-
-.cart-modal .total{
-    grid-area:price;
-}
-.cart-modal-window{
-    border-radius:20px !important;
-}
-.cart-item:not(:first-child){
-    margin-top:2rem;
-}
-.vm--container{
-    direction:ltr !important;
-}
-
-@media only screen and (max-width:768px){
-    .cart-modal .bottom:dir(rtl){
-    margin-left:0rem;
-    margin-right:0rem;
-}
-    .cart-modal-window{
-    border-radius:0px !important;
-}
-  .cart-modal .cart-item-grid{
-    grid-template-columns: 1fr 2fr auto 1fr;
-        grid-template-areas:"img text . delete"
-                        "quantity quantity . delete "
-  }
-  .cart-modal .bottom{
-  margin-left:0;
-  }
-}
-</style>

@@ -14,11 +14,16 @@ body{
 }
 //Global CSS
 .form-group{
-    input[type='text'],input[type='email'],input[type='password'],input[type='tel']{
-        @apply outline-none  py-2 border border-gray-200 px-2 bg-blue-100;
+    input[type='text'],input[type='email'],input[type='password'],input[type='tel'],textarea{
+        direction:ltr;
+        @apply text-blue-500 font-semibold outline-none  py-3 border border-gray-200 px-2 focus:border-green-500 transition duration-300 bg-blue-100;
+    }
+    .error-input{
+        border:1px solid rgb(244, 63, 94) !important;
     }
     label{
-        @apply font-semibold text-blue-500;
+        text-align:left;
+        @apply font-semibold text-blue-500 block;
     }
 }
 
@@ -163,6 +168,9 @@ background-clip:         padding-box;
     }
   
 }
+.pac-target-input{
+    @apply text-blue-500 shadow-md w-full font-semibold outline-none mb-2  py-2 border border-gray-200 px-2 focus:border-green-500 transition duration-300 bg-blue-100;
+  }
 // .sub-menu-list{
 //     display:none;
 // }

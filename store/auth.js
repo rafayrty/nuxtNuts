@@ -3,7 +3,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
        this.$axios.$post('/api/auth/login',userDetail).then(res=>{
           vuexContext.commit('setUser', res)
-             resolve();
+             resolve(res);
         }).catch(err=>{
           reject(err);
         })
@@ -12,8 +12,12 @@ export const actions = {
     })
   },
   sync(vuexContext,syncData){
-    console.log("from cookies",this.$cookies.get('user'));
    return vuexContext.commit('syncUser',syncData);
+  },
+  updateUserDetails(vuexContext,newUser){
+   let oldUser = {first_name:newUser.first_name,last_name:newUser.last_name,phone:newUser.phone,email:newUser.email};
+   return vuexContext.commit('updateUser',newUser);
+
   },
   logOut(vuexContext){
     this.$cookies.remove('user');
@@ -28,10 +32,28 @@ export const actions = {
   })
   
   export const mutations = {
+    updateUser(state,payload){
+      state.user.first_name = payload.first_name; 
+      state.user.last_name = payload.last_name; 
+      state.user.phone = payload.phone; 
+      state.user.email = payload.first_name; 
+      const date = new Date();
+      date.setDate(date.getDate() + 10);
+      this.$cookies.set('user',state.user,{
+        expires:date
+      });
+
+    },
     setUser(state, payload) {
-       this.$cookies.set('user',payload);
+const date = new Date();
+date.setDate(date.getDate() + 10);
+       this.$cookies.set('user',payload,{
+        expires:date
+      });
       state.user = payload
-      this.$cookies.set('isLoggedIn',true);
+      this.$cookies.set('isLoggedIn',true,{
+        expires:date
+      });
       state.isLoggedIn = true
 
     //   console.log(state.categories);

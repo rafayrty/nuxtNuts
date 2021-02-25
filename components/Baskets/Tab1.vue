@@ -9,8 +9,12 @@
         },
         watch:{
           selectedBasket(){
+              if(this.selectedBasket!=false){
+
+            
               this.$toast.show('Basket Selected Successfully',{type:'success',duration:3000})
          this.$emit('basket-added');
+           }
 }
         },
          async fetch() {

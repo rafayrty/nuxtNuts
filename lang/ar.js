@@ -173,6 +173,8 @@ export default{
       "send": "إرسال",
       "pay": "ادفع الآن",
       "message": "رسالة",
+      "cities":"مدن",
+      "select_city":"حدد مدينة",
       "message_placeholder": "يرجى تقديم رسالة مفصلة بمشكلتك أو استفسارك ..."
     },
     "payment": {

@@ -1,17 +1,16 @@
 <template>
 <div class="main-modals">
-  <v-dialog />
 
        <modal name="account-modal" @before-close="closed" @opened="opened" :classes="['main-modal-window']" :width="'600'" :height="'auto'" :scrollable='true' :adaptive="true" >
 
   <perfect-scrollbar ref="scroll">
 
-<div class="forms-container py-8  w-9/12 mx-auto" style="direction:rtl;">
+<div class="forms-container py-8  w-10/12 mx-auto" style="direction:rtl;">
 <!-- Login -->
 <div class="form " style="direction:rtl;">
 <transition name="slide-fade" mode="out-in">
 <Login @close-modal="hide()" v-if="login" />
-<Register v-if="register"/>
+<Register @close-modal="hide()" v-if="register"/>
 </transition>
 
   <div class="social-logins flex justify-center my-2">
@@ -60,9 +59,9 @@
      </div>
  </div>
  <hr class="bg-gray-500 mt-4" style="height:0.05rem;">
- <a href="#" class="text-lg block mt-4 text-center text-green-500 font-bold" v-if="login" @click.prevent="openRegister()">Register</a>
+ <a href="#" class="text-lg block mt-4 text-center text-green-500 font-bold" v-if="login" @click.prevent="openRegister()">{{$t('register')}}</a>
 
- <a href="#" class="text-lg block mt-4 text-center text-green-500 font-bold" v-if="register" @click.prevent="openLogin()">Login</a>
+ <a href="#" class="text-lg block mt-4 text-center text-green-500 font-bold" v-if="register" @click.prevent="openLogin()">{{$t('login')}}</a>
 
 </div>
 

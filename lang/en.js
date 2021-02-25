@@ -118,7 +118,7 @@ export default {
   "cart": {
     "my": "My Cart",
     "items": "items",
-    "estimated": "Estimated delivery within 5 hours</span> , Next-day delivery for orders\r\n                              after 7 PM</span>.",
+    "estimated": "Estimated delivery within 5 hours</span> , Next-day delivery for orders\r\n  after 7 PM</span>.",
     "baskets": "Baskets",
     "remove": "Remove",
     "coupon": "Coupon Code",
@@ -159,6 +159,8 @@ export default {
     "send": "Send",
     "pay": "Pay Now",
     "message": "Message",
+    "cities":"Cities",
+    "select_city":"Select A City",
     "cart_error": "Your Cart Item Has Been Deleted",
     "message_placeholder": "Please provide a detailed message with your problem or inquery..."
   },

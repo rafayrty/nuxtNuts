@@ -18,10 +18,18 @@
                 basketPrice:0,
                 basketImage:'',
                 totalSelected:0,
-                completed:false
+                completed:false,
+                loading:false
             }
         },
          watch:{
+             remaining(){
+              if(this.remaining <= 0){
+                  this.loading = true;
+              }else{
+                  this.loading = false;
+              }
+             },
               basket(){
  this.remaining = this.basket.item_limit;
   this.basketMax = this.basket.item_limit;
@@ -74,6 +82,23 @@
 },
 addToBasket(e,name,image,id){
 
+// gsap.to(imgElement,{x:invert.x,y:invert.y,duration:1000,ease:'power3.easeIn'})
+    this.loading = true;
+
+// alert("Clicked");
+if(this.findElement(this.items,'productId',id)){
+
+//     swal("{{trans('messages.warning')}}", "{{trans('messages.product_exists')}}",{
+//   button: "{{trans('front.ok')}}"
+
+//     });
+this.$toast.show(this.$i18n.t('messages.product_exists'),{type:'error',duration:1500});
+this.loading = false;
+}else{
+
+let item = this.items.find(this.findEmpty);
+if(item){
+        
 let box = document.querySelector('.move');
 setTimeout(() => {
     box.children[0].style.display = "none";;
@@ -88,51 +113,80 @@ const invert = {
     x: box_X - img_X,
     y:box_Y - img_Y
 }
-console.log(invert);
 imgElement.style.opacity = "1";
 imgElement.style.transform = `translate(${invert.x}px,${invert.y}px)`
-// gsap.to(imgElement,{x:invert.x,y:invert.y,duration:1000,ease:'power3.easeIn'})
 
-// alert("Clicked");
-if(this.findElement(this.items,'productId',id)){
-//     swal("{{trans('messages.warning')}}", "{{trans('messages.product_exists')}}",{
-//   button: "{{trans('front.ok')}}"
 
-//     });
-this.$toast.show(this.$i18n.t('messages.product_exists'),{type:'error',duration:1500});
-}else{
+setTimeout(() => {
+   item.name = name;
+item.image = image;
+item.productId = id; 
 
-let item = this.items.find(this.findEmpty);
-if(item){
-        
+
+
 this.$toast.show(this.$i18n.t('messages.product_added'),{type:'success',duration:3000});
 
   this.totalSelected = this.totalSelected + 1;
 if(item.id==this.basketMin){
   this.completed = true;
 }
-setTimeout(() => {
-   item.name = name;
-item.image = image;
-item.productId = id; 
+// if(item.id!=this.basketMax){
+//   this.remaining = this.remaining - 1;
+// }
+if(this.remaining!=0){
+    this.remaining = this.remaining - 1;
+}
 
-}, 600);
 setTimeout(() => {
     imgElement.style.opacity = "0";
     setTimeout(() => {
-        imgElement.style.transform = `translate(0,0)`;
-    }, 500);
-}, 500);
+                    imgElement.style.transform = `translate(0,0)`;
+    }, 600);
+            this.loading = false;
 
-if(item.id!=this.basketMax+1){
-  this.remaining = this.remaining - 1;
+    }, 50);
+
+
+
+
+
+
+
+}, 600);
+
+
+
+
 
 }
-}
-console.log(item);
    
 }
-}
+},
+removeProduct(id){
+
+  let obj = this.items.find(obj => obj.id == id);
+
+  if(obj.name != false){
+    obj.name = false;
+    obj.id = id;
+    obj.image = false;
+    obj.productId = false;
+    this.remaining=this.remaining + 1;
+  }
+  // console.log(this.basketMin);
+  if(id==this.basketMin){
+    this.completed=false;
+   }
+  
+
+  
+
+  // this.items.splice(id);
+
+},
+showWrapping(){
+this.$emit('tab3');
+},
     }
     }
     </script>
@@ -154,15 +208,7 @@ console.log(item);
 
     </div>
     </div>
-<p class="text-sm  text-gray-400 mt-6 mb-3">Categories</p>
-    <ul class="basket-categories font-semibold flex flex-wrap lg:block">
-        <li class="border border-green-500 rounded-lg px-2"><a href="#">All</a></li>
-        <li class="px-2"><a href="#">On Sale%</a></li>
-        <li class="px-2"><a href="#">Dried Fruits</a></li>
-        <li class="px-2"><a href="#">Sweets</a></li>
-        <li class="px-2"><a href="#">Uncooked cracking</a></li>
 
-    </ul>
 </div>
     
     <div class="basket-products mt-6 lg:mt-0">
@@ -176,11 +222,10 @@ console.log(item);
             <img :src="product.image" style="width:25px;height:25px;z-index:10;" class="absolute opacity-0 transition duration-1000"  alt="">
         </div>
         <div class="basket-product-detail mt-2 px-4">
-            <p class="category text-gray-400 text-sm">Roasted Nuts</p>
-                <h3 class="basket-product-name text-black font-bold text-lg">
+                <h3 class="basket-product-name text-black font-bold text-md">
                          {{product.descriptions[0].name}}
                 </h3>
-                <button @click="addToBasket($event,product.descriptions[0].name,product.image,product.id)" class="bg-blue-500 cursor-pointer w-full text-white font-semibold py-2 mt-2 rounded-md hover:bg-blue-800" >{{$t('baskets.add_to_basket')}}</button>
+                <button @click="addToBasket($event,product.descriptions[0].name,product.image,product.id)" :disabled="loading" class="bg-blue-500 cursor-pointer w-full text-white font-semibold py-2 mt-2 rounded-md hover:bg-blue-800" >{{$t('baskets.add_to_basket')}}</button>
         </div>
 
     </div>
@@ -194,7 +239,7 @@ console.log(item);
     <div class="basket-addition  shadow-lg rounded-2xl">
         <div class="button">
 
-<button>{{$t('baskets.choose_wrapping')}} </button>
+<button :class="{'active-wrap':completed}"  :disabled="!completed" @click="showWrapping()"> {{$t('baskets.choose_wrapping')}} </button>
 
 </div>
 <div class="text  mt-8">
@@ -206,15 +251,33 @@ console.log(item);
 
 <div class="add-products" v-if="Object.keys(basket).length > 0">
 
-<div class="add-product" v-for="item in items" :key="item.id" >
-    <div class="icon" v-show="!item.image" :class="{move:!item.image}" >
+<div class="add-product relative" v-for="item in items" :key="item.id" >
+    <div class="icon" v-if="!item.image" :class="{move:!item.image}" >
 
     
 <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M8.74292 1.28247V17.7175M0.525391 9.5H16.9604" stroke-width="3" stroke="#BDBDBD" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 </div>
-<div class="image-basket" v-show="item.image">
+
+<div v-show="item.image" class="close absolute -right-5 -top-2 text-lg leading-0">
+
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg @click="removeProduct(item.id)" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 cursor-pointer" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+<ellipse style="fill:#E04F5F;" cx="256" cy="256" rx="256" ry="255.832"/>
+<g transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 77.26 32)">
+	<rect x="3.98" y="-427.615" style="fill:#FFFFFF;" width="55.992" height="285.672"/>
+	<rect x="-110.828" y="-312.815" style="fill:#FFFFFF;" width="285.672" height="55.992"/>
+</g>
+
+
+</svg>
+
+</div>
+<div class="image-basket " v-show="item.image">
+
+
     <img :src="item.image"  style="width:25;height:25px;"  alt="">
 </div>
 
@@ -229,7 +292,7 @@ console.log(item);
         </div>
 
 <div class="basket-image">
-    <img src="~/assets/images/pngwing.png" class="w-full text-center" alt="">
+    <img :src="basket.image" class="w-full text-center" alt="">
 </div>
     </div>
     
@@ -289,6 +352,13 @@ console.log(item);
     border-radius:60px;
     justify-self:center;
 
+}
+.active-wrap{
+        background: linear-gradient(
+-180deg
+,#f2af4a 0,#f2994a 100%)!important;
+    border-color: #fdebdb!important;
+    box-shadow: 0 0 0 10px #fcefdb!important;
 }
 
 </style>

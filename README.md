@@ -1,4 +1,4 @@
-# Frontend Built On Nuxt JS Built For [NAZADV](https://naznuts.com)
+# Frontend Built On Nuxt JS Built For [NAZADV](https://nazadv.com)
 
 ## Build Setup
 

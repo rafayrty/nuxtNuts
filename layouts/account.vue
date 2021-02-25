@@ -42,6 +42,17 @@
             </span>
             
             {{$t('profile')}}</nuxt-link></li>
+                    <li class="text-red-500 font-semibold text-lg py-2 border-t lg:border-gray-200 lg:py-3 lg:w-9/12">
+<a href="#" @click.prevent.once="logOut" class="flex items-center pb-2 border-b-4 lg:border-b-0 lg:border-l-4  border-gray-400">
+            <span class="mx-3">
+                
+<svg xmlns="http://www.w3.org/2000/svg" class="w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+</svg>
+            </span>
+            
+            {{$t('logout')}}</a>
+                    </li>
     </ul>
 </aside>
 
@@ -59,8 +70,10 @@
 </template>
 <script>
 export default {
+ middleware:['authenticated'],
         transition:{
-            name:'main',
+  name: 'layout',
+  mode: 'out-in',
               beforeLeave(element) {
       this.prevHeight = getComputedStyle(element).height;
     },
@@ -85,17 +98,40 @@ export default {
             
         }
   },
+  methods:{
+
+   logOut(){
+
+     this.$store.dispatch('auth/logOut');
+     this.$toast.show("Logged Out",{type:'error',duration:5000});
+     this.$router.replace({path:'/'});
+
+   }
+  }
 }
 </script>
-<style lang="scss" scoped>
-.main-enter-active, .main-leave-active {
+<style>
+.layout-enter-active,
+.layout-leave-active {
+    transition: all .5s;
+    overflow: hidden;
+    }
+.layout-enter,
+.layout-leave-active {
+  transform: translateX(10px);
+    opacity: 0
+}
+/* .main-enter-active, .main-leave-active {
     transition: all .5s;
     overflow: hidden;
   }
   .main-enter, .main-leave-active {
       transform: translateX(10px);
     opacity: 0
-  }
+  } */
+</style>
+<style lang="scss" scoped>
+
 aside{
     ul{
         margin:0;
@@ -114,6 +150,8 @@ aside{
      @apply text-green-500 border-b-4 border-green-500;
  }
 }
+
+
 @media only screen and (min-width:1024px){
     .account-container{
         grid-template-columns:.45fr 1fr;
