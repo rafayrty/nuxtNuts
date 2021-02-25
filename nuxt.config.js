@@ -46,7 +46,8 @@ export default {
    "~/plugins/vue-maps",
    {src:'./plugins/vue-google-oauth2',ssr: false},
    { src: '~/plugins/vuex-persist', ssr: false },
-   {src:'~/plugins/overlay-loader',ssr:false}
+   {src:'~/plugins/overlay-loader',ssr:false},
+   { src: '@/plugins/vue-awesome-swiper', ssr:false }
     ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

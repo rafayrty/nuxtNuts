@@ -16,17 +16,17 @@
 <aside class="mt-12">
 <div class="cart-details px-7 py-6 bg-green-100">
 <div class="cart-coupon">
+<transition name="slide-fade">
 
-<div class="coupon-input" v-if="!couponApplied">  
-    <label for="coupon" class="text-md">Apply A Coupon</label>
+<div key="0" class="coupon-input" v-if="!couponApplied">  
+    <label for="coupon" class="text-md">{{$t('cart.apply_coupon')}}</label>
     <div class="input flex jutsify-center mt-1">
     <input type="text" v-model="coupon" :placeholder="$t('cart.coupon')" name="coupon" class="w-full px-2" id="">
     <button class="bg-green-500 font-semibold py-2 px-4 text-white ml-2 hover:bg-green-800 cursor-pointer" @click="applyCoupon()">{{$t('cart.apply')}}</button>
     </div>
 
 </div>
-
-<div class="applied-coupon flex items-center relative justify-between bg-yellow-200 py-4 px-2" v-if="couponApplied">
+<div key="1" class="applied-coupon flex items-center relative justify-between bg-yellow-200 py-4 px-2" v-if="couponApplied">
 <a href="#" @click.prevent="removeDiscount" class="close text-white bg-red-600 absolute flex items-center p-1 hover:bg-red-800 hover:shadow-md transition duration-300 justify-center text-2xl rounded-full h-8 w-8 cursor-pointer">
 <!-- <svg  viewbox="0 0 16 16" width="16" height="16">
 <path d="M-10 12h24" stroke="#fff" stroke-width="3" style="transform: rotate(-45deg);"></path>
@@ -41,6 +41,7 @@
 <p class="text-blue-500 font-semibold">₪ {{discount}} Discount</p>
 </div>
 
+</transition>
 
 <div class="order-summary mt-8">
 <h4 class="font-bold text-lg">{{$t('cart.summary')}}</h4>

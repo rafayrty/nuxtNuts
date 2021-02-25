@@ -137,7 +137,7 @@ export default {
     "no_address": "No Addresses Found",
     "choose_address": "Choose Your Address",
     "add_address": "Add An Address",
-    "apply_coupon": "Apply discount coupon",
+    "apply_coupon": "Apply A coupon",
     "back": "Back",
     "locate": "Locate Me",
     "user_address": "Use An Address Instead",
