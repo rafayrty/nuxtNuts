@@ -95,13 +95,7 @@ export default {
         dir: 'rtl',
         file: 'ar.js'
 
-      },{
-        code: 'en',
-        name: 'English',
-        dir: 'ltr',
-        file: 'en.js'
-
-      },
+      }
     ],
     vueI18nLoader: true,
     lazy: true,
