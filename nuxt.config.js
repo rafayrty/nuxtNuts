@@ -38,16 +38,18 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-      '~/plugins/axios',
+    '~/plugins/axios',
     '~/plugins/i18n.js',
     '~/plugins/vue-perfect-scrollbar.js',
     '~/plugins/vue-js-modal.js',
-   "~/plugins/vue-maps",
-  {src:'./plugins/vue-google-oauth2',ssr: false},
+    "~/plugins/vue-maps",
+   { src:'./plugins/vue-google-oauth2',ssr: false},
    { src: '~/plugins/vuex-persist', ssr: false },
-   {src:'~/plugins/overlay-loader',ssr:false},
+   { src:'~/plugins/overlay-loader',ssr:false},
    { src: '@/plugins/vue-awesome-swiper', ssr:false },
-   { src: '@/plugins/confirm-modal', ssr:false }
+   { src: '@/plugins/confirm-modal', ssr:false },
+   { src: '@/plugins/flickity', ssr:false }
+
 
     ],
 

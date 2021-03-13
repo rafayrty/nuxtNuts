@@ -19,12 +19,13 @@
           <div class="left col-start-1	col-end-5">
 
             <div class="slider shadow-lg	 	bg-white  rounded lg:border-green-500 lg:border-2	">
+              <no-ssr>
 <flickity ref="flickity" :options="flickityOptions">
   <div class="carousel-cell ">
 <div class="grid grid-cols-2 gap-x-6 items-center">
 
               <div class="slider-image h-full">
-                <img src="~/assets/images/slider.png" class="w-full  h-full object-cover" alt="">
+                <img  data-flickity-lazyload="https://i.ibb.co/QDnVm87/slider.png" class="w-full  h-full object-cover" alt="">
 
               </div>
 
@@ -50,7 +51,7 @@
 <div class="grid grid-cols-2 gap-x-6 items-center">
 
               <div class="slider-image h-full">
-                <img src="~/assets/images/slider.png" class="w-full  h-full object-cover" alt="">
+                <img  data-flickity-lazyload="https://i.ibb.co/QDnVm87/slider.png" class="w-full  h-full object-cover" alt="">
 
               </div>
 
@@ -76,7 +77,7 @@
 
 </flickity>
 
-
+              </no-ssr>
             </div>
 
 
@@ -323,7 +324,15 @@
 .flickity-slider {
   transform: none !important;
 }
+.flickity-page-dots{
+    width: auto;
+    bottom: 5%;
+    left: 4%;
+}
 
+.flickity-page-dots .dot{
+  background: rgb(15, 114, 157);
+}
 .carousel-cell {
   left: 0 !important;
   opacity: 0;
@@ -352,13 +361,10 @@
 }
 </style>
 <script>
-import Flickity from 'vue-flickity';
 
 
 export default {
-   components: {
-    Flickity
-  },
+ 
    data() {
     return {
       flickityOptions: {
@@ -366,7 +372,9 @@ export default {
         pageDots: true,
         wrapAround: true,
         fade: true,
-        adaptiveHeight: true
+        adaptiveHeight: true,
+        prevNextButtons: false,
+        lazyLoad: true
 
 
         
