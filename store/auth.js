@@ -11,6 +11,18 @@ export const actions = {
  
     })
   },
+  async googleLogin(vuexContext,userDetail){
+    return new Promise((resolve, reject) => {
+       this.$axios.$post('/api/auth/google',userDetail).then(res=>{
+          vuexContext.commit('setUser', res)
+             resolve(res);
+        }).catch(err=>{
+          reject(err);
+        })
+
+ 
+    })
+  },
   sync(vuexContext,syncData){
    return vuexContext.commit('syncUser',syncData);
   },
@@ -45,8 +57,8 @@ export const actions = {
 
     },
     setUser(state, payload) {
-const date = new Date();
-date.setDate(date.getDate() + 10);
+      const date = new Date();
+      date.setDate(date.getDate() + 10);
        this.$cookies.set('user',payload,{
         expires:date
       });

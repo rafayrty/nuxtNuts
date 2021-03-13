@@ -23,7 +23,16 @@
 }
 </style>
 <script>
+import DesktopMenu from './DesktopMenu/DesktopMenu';
+import MobileMenu from './MobileMenu/MobileMenu';
+import Main from './Logins/Main';
+
 export default {
+  components:{
+   DesktopMenu,
+   MobileMenu,
+   Main
+  },
 //  async fetch(){
 //            this.categories =  await this.$axios.$get(`/api/categories/${this.$i18n.locale}`)
 //             .then(data=>{

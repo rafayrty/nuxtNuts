@@ -18,33 +18,27 @@
 <div class="category text-gray-400">
  Nuts & Crackers > Roasted Nuts
 </div>
-<div class="tags mt-6">
-     
-
-        <a href="">
-
-        <span class="tag mx-3 hover:bg-green-300 cursor-pointer bg-green-200 text-green-500 px-2 py-1 font-bold rounded-full">
+<div class="tags w-full mt-6">
+<a href="#" class="tag mx-2 inline-block hover:bg-green-300 cursor-pointer bg-green-200 text-green-500 px-2 py-1 font-bold rounded-full">
         Fresh
-    </span>
     </a>
-    <a href="">
-      <span class="tag mx-3 hover:bg-green-300 cursor-pointer bg-green-200 text-green-500 px-2 py-1 font-bold rounded-full">
-        NazNuts Original
-    </span>
+    <a href="#" class="tag mx-2 inline-block hover:bg-green-300 cursor-pointer bg-green-200 text-green-500 px-2 py-1 font-bold rounded-full">
+        NazNuts
     </a>
 </div>
 
 <div class="tabs mt-8">
  <div class="tab-names border-b border-gray-300 pb-2 font-semibold flex text-gray-400">
-     <p class="text-blue-500 ">Description</p>
-      <p class="mx-4">Returns</p>
-      <p class="mx-4">Bundles</p>
+     <p class="text-blue-500  cursor-pointer" @click="currentTab = 'description'">Description</p>
+      <p class="mx-4 cursor-pointer">Returns</p>
+      <p class="mx-4 cursor-pointer">Bundles</p>
 
  </div>
+<transition name="slide-fade">
+<div key="0" class="tab text-gray-400 mt-3" id="tab1" v-if="currentTab == 'description'" v-html="product.description"></div>
 
-<div class="tab text-gray-400 mt-3" id="tab1">
-    Integer facilisi condimentum facilisi nunc. Viverra magna odio ac in. Consectetur turpis metus aliquet in congue feugiat. Ac malesuada id pharetra, quis massa quis tristique felis. Ac dolor enim vivamus risus, nulla semper viverra convallis. Diam quam et eget pulvinar consequat lectus nunc. Penatibus ipsum.
-</div>
+
+</transition>
 
 </div>
 
@@ -339,6 +333,7 @@ animation:reveal .4s ease-in-out forwards;
 export default {
   data(){
     return{
+ currentTab:'description',
  originalprice:0,
  loading:false,
  amount:0
@@ -351,7 +346,6 @@ export default {
       let product = await context.app.$axios.$get(
         `/api/products/${id}/${context.app.i18n.locale}`
       )
-      product = product[0];
       console.log(product);
       return { product }
     } catch (e) {
@@ -364,8 +358,7 @@ export default {
 }else{
   this.amount = 1;
 }
-console.log(this.amount);
-     this.originalprice = this.product.price;
+  this.originalprice = this.product.price;
     },methods:{
     illusoryId(id){
       return "product_"+id;

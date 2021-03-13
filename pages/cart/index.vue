@@ -69,7 +69,7 @@
 
  </div>
 <!--Baskets -->
-  <div class="cart-item mt-4 mx-6 p-4 rounded-xl" v-for="basketItem in basketItems" :key="basketItem.title">
+  <div class="cart-item mt-4  p-4 rounded-xl" v-for="basketItem in basketItems" :key="basketItem.title">
      <div class="basket-item-main">
 
      <div class="left cart-item-grid">
@@ -80,7 +80,7 @@
     <div class="cart-item-details ltr:ml-4 rtl:mr-4 my-1 flex flex-col justify-between">
         <h3 class="name font-bold text-lg">{{basketItem.name}}</h3>
 <div class="prd-images flex">
-    <img v-for="image in basketItem.images" :key="image"  class="w-6 h-6 border border-gray-500 rounded-full mx-1" :src="image" alt="">
+    <img v-for="image in basketItem.images" :key="image"  class="w-6 h-6 object-cover border border-gray-500 rounded-full mx-1" :src="image" alt="">
 </div>
 
         <!-- Cart Item Quantitiy -->
@@ -237,11 +237,42 @@ export default {
          this.$store.dispatch('cart/subtractAmountBasket',id);
         },
         deleteProduct(id){
+
+         this.$confirm({
+          auth: false,
+          title: 'Are you sure?',
+          message:"You Want To Delete This Cart Item",
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+        callback: (confirm) =>{
+          if(confirm){
             this.$store.dispatch('cart/deleteProduct',id);
-            this.$toast.show('Product Has Been Removed From Cart',{type:'error',duration:3000});
-        },     deleteBasket(id){
-            this.$store.dispatch('cart/deleteBasket',id);
-            this.$toast.show('Basket Has Been Removed From Cart',{type:'error',duration:3000});
+            this.$toast.show( this.$t('messages.cart_delete'),{type:'error',duration:3000});
+          }
+        }
+       
+      })
+          
+        },     
+        deleteBasket(id){
+        this.$confirm({
+          auth: false,
+          title: 'Are you sure?',
+          message:"You Want To Delete This Cart Item",
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+        callback: (confirm) =>{
+          if(confirm){
+             this.$store.dispatch('cart/deleteBasket',id);
+             this.$toast.show( this.$t('messages.cart_delete'),{type:'error',duration:3000});
+          }
+        }
+       
+      })
         },
 
     },

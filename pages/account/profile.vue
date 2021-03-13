@@ -41,10 +41,9 @@
      </transition>
      <!-- Error -->
 </div>
-
-<div class="form-group mt-2 lg:w-9/12  lg:pl-4 lg:rtl:pl-0 lg: rtl:pr-4 lg:mt-6">
+<div  class="form-group mt-2 lg:w-9/12  lg:pl-4 lg:rtl:pl-0 lg: rtl:pr-4 lg:mt-6">
     <label for="password">{{$t('form.password')}}</label>
-    <input type="text" class="w-full"  v-model="password" :class="{'error-input':errors.password}" @input="errors.password = false" :placeholder="$t('password_placeholder')" name="password" id="email">
+    <input type="text" :disabled="user.type != 'normal'" class="w-full"  v-model="password" :class="{'error-input':errors.password}" @input="errors.password = false" :placeholder="$t('password_placeholder')" name="password" id="email">
      <!-- Error --> 
     <transition name="slide-fade">
      <span class="text-red-500 font-bold text-md" v-if="errors.password">{{errors.password[0]}}</span>
@@ -55,7 +54,7 @@
 
 </div>
 <div class="form-group mt-2 lg:mt-6">
-    <label for="password">{{$t('form.phone')}}</label>
+    <label for="phone">{{$t('form.phone')}}</label>
     <input type="text" class="w-full" :class="{'error-input':errors.phone}"  v-model="user.phone" @input="errors.phone = false" :placeholder="$t('Phone_placeholder')" name="phone" id="email">
      <!-- Error --> 
     <transition name="slide-fade">
@@ -66,7 +65,7 @@
 <div class="form-group mt-4">
     <label for="newsletter">
         {{$t('form.newsletter')}}
-    <input type="checkbox" name="newsletter" id="newsletter">
+    <input type="checkbox" class="text-green-500 focus:ring-green-500 rounded cursor-pointer ring-green-500" name="newsletter" id="newsletter">
 </label>
 </div>
 

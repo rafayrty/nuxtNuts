@@ -14,7 +14,7 @@
 <div class="subscribe-input mt-2 text-black flex">
 
 <input type="email" class="px-4 w-full py-3 focus:outline-none focus:ring focus:border-green-500 rounded-md" name="subscribe_email" :placeholder="$t('subscribe_placeholder')" id="">
-<button class="bg-blue-700 text-white py-3 px-8 rounded-lg ltr:ml-4 rtl:mr-4 hover:bg-green-500 transition duration-300">{{$t('subscribe_btn')}}</button>
+<button class="bg-blue-700 w-2/6 text-white py-3 px-8 rounded-lg ltr:ml-4 rtl:mr-4 hover:bg-green-500 transition duration-300">{{$t('subscribe_btn')}}</button>
 </div>
 
 </div>
@@ -24,7 +24,7 @@
   {{$t('deals')}}
 </p>
 <div class="app-icons flex justify-center lg:justify-start items-center mt-2 ">
-<a href="#">
+<a :href="info.apple">
 <svg width="135" height="40" viewBox="0 0 135 40" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M130.197 40H4.729C2.122 40 0 37.872 0 35.267V4.726C0 2.12 2.122 0 4.729 0H130.197C132.803 0 135 2.12 135 4.726V35.267C135 37.872 132.803 40 130.197 40Z" fill="#A6A6A6"/>
 <path d="M134.032 35.268C134.032 37.384 132.318 39.098 130.198 39.098H4.72914C2.61014 39.098 0.890137 37.384 0.890137 35.268V4.72501C0.890137 2.61001 2.61014 0.890015 4.72914 0.890015H130.197C132.318 0.890015 134.031 2.61001 134.031 4.72501L134.032 35.268Z" fill="black"/>
@@ -53,7 +53,7 @@
 <path d="M121.207 10.853C121.207 11.041 121.193 11.199 121.168 11.328H118.025C118.039 11.794 118.189 12.149 118.48 12.395C118.746 12.615 119.089 12.725 119.509 12.725C119.974 12.725 120.398 12.651 120.78 12.502L120.944 13.23C120.497 13.424 119.971 13.521 119.362 13.521C118.632 13.521 118.057 13.306 117.641 12.876C117.223 12.446 117.016 11.869 117.016 11.145C117.016 10.434 117.209 9.84201 117.598 9.37001C118.004 8.86601 118.553 8.61401 119.246 8.61401C119.924 8.61401 120.439 8.86601 120.787 9.37001C121.068 9.77001 121.207 10.265 121.207 10.853ZM120.207 10.582C120.215 10.271 120.146 10.003 120.004 9.77701C119.822 9.48601 119.545 9.34001 119.17 9.34001C118.828 9.34001 118.549 9.48201 118.336 9.76701C118.162 9.99401 118.059 10.265 118.025 10.582H120.207Z" fill="white"/>
 </svg>
 </a>
-<a href="#" class="ltr:ml-4 rtl:mr-4">
+<a :href="info.playstore" class="ltr:ml-4 rtl:mr-4">
 
 <svg width="135" height="40" viewBox="0 0 135 40" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M130 40H5C2.2 40 0 37.7 0 35V5C0 2.2 2.3 0 5 0H130C132.8 0 135 2.3 135 5V35C135 37.7 132.8 40 130 40Z" fill="black"/>
@@ -132,7 +132,8 @@
 </div>
 <div class="about mt-6 lg:mt-0 lg:ltr:ml-10 lg:rtl:mr-10 text-center lg:text-left">
 <p class="text-white">
-Ullamcorper quis pellentesque quam urna proin est quam arcu. Varius congue magna lacus mus ipsum. Nunc, fringilla elit adipiscing suscipit metus eleifend sit placerat faucibus. Vulputate tellus eget nulla tristique ut praesent molestie in.
+{{info.description}}
+
 </p>
 </div>
   </div>
@@ -140,18 +141,18 @@ Ullamcorper quis pellentesque quam urna proin est quam arcu. Varius congue magna
 <div class="right justify-self-end text-white mt-4 lg:mt-0">
 <ul class="flex justify-between lg:block">
   <li class="flex justify-between"> 
-    <a href="#" class="underline mx-2 lg:mx-8">{{$t('home')}}</a>
+    <nuxt-link :to="localePath('/')"  class="underline mx-2 lg:mx-8">{{$t('home')}}</nuxt-link>
     <a href="#" class="underline mx-2 lg:mx-8">{{$t('footer_policy')}}</a>
 
   </li>
     <li class="flex justify-between lg:mt-4"> 
-    <a href="#" class="underline mx-2 lg:mx-8">Blog</a>
-    <a href="#" class="underline mx-2  lg:mx-8">{{$t('about')}}</a>
+    <nuxt-link :to="localePath('/blog')" @click="window.scroll({top: 0, left: 0, behavior: 'smooth'})" class="underline mx-2 lg:mx-8">Blog</nuxt-link>
+    <a href="#" class="underline mx-w2  lg:mx-8">{{$t('about')}}</a>
 
   </li>
     <li class="flex justify-between lg:mt-4"> 
     <nuxt-link :to="localePath('/basket')" class="underline mx-2 lg:mx-8">{{$t('account_text')}}</nuxt-link>
-    <a href="#" class="underline mx-2  lg:mx-8">{{$t('contact')}}</a>
+    <nuxt-link :to="localePath('/contact')" class="underline mx-2  lg:mx-8">{{$t('contact')}}</nuxt-link>
 
   </li>
 </ul>
@@ -168,28 +169,31 @@ Ullamcorper quis pellentesque quam urna proin est quam arcu. Varius congue magna
 <div class="container flex justify-between flex-col lg:flex-row items-center">
 
 <div class="icons flex my-2 lg:my-0">
-<a href="#">
+<a :href="info.insta" class="cursor-pointer text-white transition duration-200 transform hover:scale-110">
   
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M12.0001 0C5.37268 0 0 5.39514 0 12.0502C0 18.0191 4.32626 22.9623 9.9987 23.9195V14.5642H7.10393V11.1977H9.9987V8.71529C9.9987 5.83501 11.7506 4.26543 14.3096 4.26543C15.5353 4.26543 16.5886 4.35714 16.8944 4.39753V7.40819L15.1194 7.40905C13.728 7.40905 13.4598 8.07288 13.4598 9.04735V11.1959H16.7798L16.3468 14.5625H13.4598V24C19.397 23.2744 24 18.2052 24 12.0468C24 5.39514 18.6273 0 12.0001 0Z" fill="white"/>
 </svg>
 
 </a>
-<a href="#" class="ltr:ml-2 rtl:mr-2">
+<a :href="info.fb" class="ltr:ml-2  cursor-pointer text-white transition duration-200 transform hover:scale-110 rtl:mr-2">
   
 
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M9.6347 12.0001C9.6347 13.3043 10.6958 14.3652 12 14.3652C13.3042 14.3652 14.3653 13.3043 14.3653 12.0001C14.3653 10.6958 13.3043 9.63478 12 9.63478C10.6957 9.63478 9.6347 10.6958 9.6347 12.0001Z" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M17.7579 15.1365C17.7579 16.582 16.582 17.7579 15.1365 17.7579H8.86341C7.41805 17.7579 6.24215 16.582 6.24215 15.1365V8.86349C6.24215 7.41813 7.41805 6.24215 8.86341 6.24215H15.1364C16.5819 6.24215 17.7579 7.41813 17.7579 8.86349L17.7579 15.1365ZM15.7587 7.33946C15.5194 7.33946 15.2843 7.43635 15.1153 7.60611C14.9455 7.77504 14.8478 8.01022 14.8478 8.25037C14.8478 8.48977 14.9455 8.72487 15.1153 8.89463C15.2842 9.06356 15.5194 9.16128 15.7587 9.16128C15.9989 9.16128 16.2332 9.06356 16.403 8.89463C16.5728 8.72487 16.6697 8.48969 16.6697 8.25037C16.6697 8.01022 16.5728 7.77504 16.403 7.60611C16.2341 7.43635 15.9989 7.33946 15.7587 7.33946ZM12 8.39272C10.0108 8.39272 8.39256 10.011 8.39256 12.0002C8.39256 13.9893 10.0108 15.6074 12 15.6074C13.9892 15.6074 15.6074 13.9893 15.6074 12.0002C15.6074 10.011 13.9892 8.39272 12 8.39272Z" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12ZM8.86341 5H15.1364C17.2669 5 19.0001 6.73321 19 8.86349V15.1365C19 17.2668 17.2669 19 15.1364 19H8.86341C6.73313 19 5 17.2669 5 15.1365V8.86349C5 6.73321 6.73313 5 8.86341 5Z" fill="white"/>
+<svg width="24" height="24" class="fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.6347 12.0001C9.6347 13.3043 10.6958 14.3652 12 14.3652C13.3042 14.3652 14.3653 13.3043 14.3653 12.0001C14.3653 10.6958 13.3043 9.63478 12 9.63478C10.6957 9.63478 9.6347 10.6958 9.6347 12.0001Z" />
+<path fill-rule="evenodd" clip-rule="evenodd" d="M17.7579 15.1365C17.7579 16.582 16.582 17.7579 15.1365 17.7579H8.86341C7.41805 17.7579 6.24215 16.582 6.24215 15.1365V8.86349C6.24215 7.41813 7.41805 6.24215 8.86341 6.24215H15.1364C16.5819 6.24215 17.7579 7.41813 17.7579 8.86349L17.7579 15.1365ZM15.7587 7.33946C15.5194 7.33946 15.2843 7.43635 15.1153 7.60611C14.9455 7.77504 14.8478 8.01022 14.8478 8.25037C14.8478 8.48977 14.9455 8.72487 15.1153 8.89463C15.2842 9.06356 15.5194 9.16128 15.7587 9.16128C15.9989 9.16128 16.2332 9.06356 16.403 8.89463C16.5728 8.72487 16.6697 8.48969 16.6697 8.25037C16.6697 8.01022 16.5728 7.77504 16.403 7.60611C16.2341 7.43635 15.9989 7.33946 15.7587 7.33946ZM12 8.39272C10.0108 8.39272 8.39256 10.011 8.39256 12.0002C8.39256 13.9893 10.0108 15.6074 12 15.6074C13.9892 15.6074 15.6074 13.9893 15.6074 12.0002C15.6074 10.011 13.9892 8.39272 12 8.39272Z" />
+<path fill-rule="evenodd" clip-rule="evenodd" d="M24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12ZM8.86341 5H15.1364C17.2669 5 19.0001 6.73321 19 8.86349V15.1365C19 17.2668 17.2669 19 15.1364 19H8.86341C6.73313 19 5 17.2669 5 15.1365V8.86349C5 6.73321 6.73313 5 8.86341 5Z" />
 </svg>
 
 
 </a>
 </div>
-  <div class="powered text-white my-2 lg:my-0">
-<p class="flex items-center">{{$t('powered')}}
-<svg width="66" class="mx-1" height="10" viewBox="0 0 66 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="powered flex items-center text-white my-2 lg:my-0" >
+<p>
+     {{$t('powered')}}
+</p>
+<a href="https://nazadv.com">
+  <svg class="mx-2 block w-24" viewBox="0 0 66 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M6.87287 6.22507L3.21026 0.00949668H0V10H2.55848L2.55361 3.90788L6.14327 10H9.42649V0.00949668H6.87287V6.22507Z" fill="white"/>
 <path d="M21.6936 2.49288H28.0265L21.6984 7.49288H21.6936V9.98575H32.088V7.49288H25.755L32.088 2.49288V0H21.6936V2.49288Z" fill="white"/>
 <path d="M17.3694 0H13.7603L10.6376 9.9905H13.308L15.5649 2.76828L17.8169 9.9905H20.4873L20.4386 9.83381L17.3694 0Z" fill="white"/>
@@ -197,13 +201,15 @@ Ullamcorper quis pellentesque quam urna proin est quam arcu. Varius congue magna
 <path d="M40.2255 0L37.0882 9.98575H39.7002L40.7411 6.61918L40.7703 6.51947H40.7752L41.3637 4.81007L42.0106 2.71605L42.6575 4.81007L43.2461 6.51947L43.2753 6.61918L44.3162 9.98575H46.9281L43.7908 0H40.2255Z" fill="white"/>
 <path d="M66 0H63.388L62.3471 3.37132L62.3179 3.46629V3.47103L61.7294 5.18044L61.0825 7.27445L60.4356 5.18044L59.847 3.47103L59.8421 3.46629L59.813 3.37132L58.7721 0H56.1601L59.2974 9.98575H62.8627L66 0Z" fill="white"/>
 </svg>
-© 2020 
+</a>
+<p>
+  © 2020 
 </p>
   </div>
 
-<div class="cards flex my-2 lg:my-0">
+<div class="cards flex  text-white my-2 lg:my-0">
   
-<svg width="75" height="31" viewBox="0 0 75 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="75" height="31" viewBox="0 0 75 31"  fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect y="0.0644531" width="75" height="30" rx="6" fill="white"/>
 <path d="M31.9526 20.9095L34.1625 8.47888H37.6155L35.4746 20.9095H31.9526Z" fill="#3C58BF"/>
 <path d="M31.9526 20.9095L34.7841 8.47888H37.6155L35.4746 20.9095H31.9526Z" fill="#293688"/>
@@ -262,3 +268,13 @@ Ullamcorper quis pellentesque quam urna proin est quam arcu. Varius congue magna
 </footer>
     
 </template>
+
+<script>
+export default {
+  computed:{
+    info(){
+return this.$store.getters['info'];
+}
+  }
+}
+</script>

@@ -27,7 +27,7 @@
     <style scoped>
     .radio-btn{
     height: 30px;
-    width: 100%;
+    width: 30px;
     cursor:pointer;
     }
     .tab3 .button-add-to-cart{
@@ -78,8 +78,10 @@
 
 
   <div v-for="wrapping in wrappings" :key="wrapping.id" class="wrapping relative border-gray-500 hover:shadow-2xl transition duration-300 border pt-6 my-6 lg:py-4 lg:pb-4 rounded-xl" >
-<input type="radio" v-model="selectedWrapping" :value="wrapping.id"  name="wrappingSelected" class="radio-btn">
+<div class="radio-btn-container text-center">
 
+<input type="radio" v-model="selectedWrapping" :value="wrapping.id"  name="wrappingSelected" class="radio-btn">
+</div>
   <img :src="wrapping.image" alt="">
    <div class="wrapping-name mx-3 mt-4  bg-green-500 text-white  text-center py-1 font-bold">
        {{wrapping.name}}

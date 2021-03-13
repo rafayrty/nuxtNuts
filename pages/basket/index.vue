@@ -34,8 +34,18 @@
 
 
 <script>
+import Tab1 from '../../components/Baskets/Tab1'
+import Tab2 from '../../components/Baskets/Tab2'
+import Tab3 from '../../components/Baskets/Tab3'
+
 export default {
-        transition:{
+    components:{  
+
+    Tab1,
+    Tab2,
+    Tab3
+    },
+    transition:{
             name:'main',
               beforeLeave(element) {
       this.prevHeight = getComputedStyle(element).height;

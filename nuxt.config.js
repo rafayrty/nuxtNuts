@@ -28,7 +28,6 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap'},
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap'},
-
     ]
   },
 
@@ -44,10 +43,12 @@ export default {
     '~/plugins/vue-perfect-scrollbar.js',
     '~/plugins/vue-js-modal.js',
    "~/plugins/vue-maps",
-   {src:'./plugins/vue-google-oauth2',ssr: false},
+  {src:'./plugins/vue-google-oauth2',ssr: false},
    { src: '~/plugins/vuex-persist', ssr: false },
    {src:'~/plugins/overlay-loader',ssr:false},
-   { src: '@/plugins/vue-awesome-swiper', ssr:false }
+   { src: '@/plugins/vue-awesome-swiper', ssr:false },
+   { src: '@/plugins/confirm-modal', ssr:false }
+
     ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -62,9 +63,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
    'v-shared-element/nuxt',
-
-  'nuxt-i18n',
-  
+   'nuxt-i18n',
 
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',

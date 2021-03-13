@@ -2,18 +2,18 @@
   <div class="main mt-4  pb-12">
 
     <div class="top-bar flex text-xl font-bold">
-      <p class="text-gray-400 active">{{$t('orders')}}</p>
+      <p class="text-gray-400 cursor-pointer" @click="currentTab = 'order'" :class="{'active':currentTab == 'order'}">{{$t('orders')}}</p>
       <p class="mx-4 text-gray-400">|</p>
-      <p class="text-gray-400 ">{{$t('gifts')}}</p>
+      <p class="text-gray-400 cursor-pointer" @click="currentTab = 'gift'" :class="{'active':currentTab == 'gift'}">{{$t('gifts')}}</p>
     </div>
-
-    <div class="orders">
+<transition name="slide-fade" key="0" mode="out-in">
+    <div v-if="currentTab=='order' && orders.length!=0" class="orders">
 
       <!-- Order Starts -->
       <div v-for="order in orders" :key="order.id" class="order-list bg-white border-2 mt-12 pb-6 shadow-lg border-gray-200">
         <div class="order-header bg-gray-100 border border-gray-300 px-4  font-semibold py-1 flex justify-between">
           <p class="order-number text-blue-500">
-            Order: {{order.id}}
+            {{$t('account.order')}} {{order.id}}
 
           </p>
           <p class="text-gray-400">
@@ -24,25 +24,25 @@
         <div class="order-top flex justify-between  px-4 py-4 items-center">
           <div class="start">
             <div class="recipient">
-              <label class="text-gray-400 text-xs font-semibold">Recipient</label>
+              <label class="text-gray-400 text-xs font-semibold">{{$t('account.recipient')}}</label>
               <p class="text-sm font-semibold">{{order.first_name}} {{order.last_name}}, {{order.phone}}</p>
 
             </div>
 
             <div class="address">
-              <label class="text-gray-400 text-xs font-semibold">Address</label>
+              <label class="text-gray-400 text-xs font-semibold">{{$t('cart.address')}}</label>
               <p class="text-sm font-semibold">{{order.address}}</p>
             </div>
           </div>
-          <div class="end">
+          <div class="end flex flex-col items-center">
             <div class="invoice">
               <button
-                class="bg-white border-2 border-gray-400 rounded-lg font-bold text-gray-400 px-4 py-1 hover:bg-gray-300 hover:text-black transition duration-300 cursor-pointer text-md">Invoice</button>
+                class="bg-white border-2 border-gray-400 rounded-lg font-bold text-gray-400 px-4 py-1 hover:bg-gray-300 hover:text-black transition duration-300 cursor-pointer text-md">{{$t('account.invoice')}}</button>
             </div>
 
             <div class="cancel mt-4">
               <button
-                class="bg-white border-2 border-red-600 rounded-lg font-bold text-red-600 hover:bg-red-600 hover:text-white transition px-4 py-1 text-md">Cancel</button>
+                class="bg-white border-2 border-red-600 rounded-lg font-bold text-red-600 hover:bg-red-600 hover:text-white transition px-4 py-1 text-md">{{$t('account.cancel')}}</button>
             </div>
 
           </div>
@@ -51,27 +51,32 @@
         <div class="order-price-status flex px-4 items-center justify-between">
 
           <div class="status">
-            <label class="text-gray-400 text-xs font-semibold" for="">Status</label>
-            <p class="text-lg font-bold">Available</p>
+            <label class="text-gray-400 text-xs font-semibold" for="">{{$t('account.status')}}</label>
+            <p class="text-lg font-bold" v-if="order.shipping_status == 0">{{$t('account.awaiting')}}</p>
+            <p class="text-lg font-bold" v-if="order.shipping_status == 1">{{$t('account.confirmed')}}</p>
+            <p class="text-lg font-bold" v-if="order.shipping_status == 2">{{$t('account.out')}}</p>
+            <p class="text-lg font-bold" v-if="order.shipping_status == 3">{{$t('account.delivered')}}</p>
+            <p class="text-lg font-bold" v-if="order.shipping_status == 4">{{$t('account.cancelled')}}</p>
+
           </div>
 
           <div class="total">
-            <label class="text-gray-400 text-xs font-semibold" for="">Total Bill</label>
+            <label class="text-gray-400 text-xs font-semibold" for="">{{$t('cart.total')}}</label>
             <p class="text-green-500 font-bold">₪ {{order.total}}</p>
           </div>
         </div>
 
         <div class="status-bars px-2 flex mt-3 mb-4">
 
-          <div class="bar bg-gray-300  h-4 w-full"></div>
-          <div class="bar bg-gray-300 mx-2 h-4 w-full"></div>
-          <div class="bar bg-gray-300   h-4 w-full"></div>
+          <div class="bar bg-gray-300  h-4 w-full" :class="{'bg-gray-300':order.shipping_status == 0,'bg-yellow-300':order.shipping_status==1,'bg-yellow-500':order.shipping_status==2,'bg-green-500':order.shipping_status==3,'bg-red-500':order.shipping_status==4}"></div>
+          <div class="bar bg-gray-300 mx-2 h-4 w-full" :class="{'bg-green-500':order.shipping_status == 1,'bg-yellow-500':order.shipping_status==2,'bg-green-500':order.shipping_status==3,'bg-red-500':order.shipping_status==4}"></div>
+          <div class="bar bg-gray-300   h-4 w-full" :class="{'bg-green-500':order.shipping_status == 1,'bg-yellow-500':order.shipping_status==2,'bg-green-500':order.shipping_status==3,'bg-red-500':order.shipping_status==4}"></div>
         </div>
 
         <hr class="bg-gray-400">
         <div class="items px-4 mt-4">
           <p class="text-sm text-gray-400 ">
-            {{order.totalProducts}} Items
+            {{order.totalProducts}} {{$t('account.items')}}
           </p>
           <div v-swiper="swiperOption" :instanceName="order.id" class="items-list mt-3 items-center">
             <div class="swiper-wrapper">
@@ -114,22 +119,32 @@
       <!-- Order Ends -->
 
       <!-- Pagination Begins -->
-      <div class="flex flex-col items-center my-12">
+      <div v-if="orders.length!=0" class="flex flex-col items-center my-12">
         <div class="flex text-gray-700">
-          <div class="flex h-12 font-medium rounded-full bg-gray-200">
-            <div v-for="index in pagination.last_page" :key="index" @click="page(index)"
-              :class="{'active-page':pagination.currentOrderPage == index}"
-              class="w-12 md:flex justify-center items-center hidden  cursor-pointer leading-5 transition duration-150 ease-in  rounded-full  ">
-              {{index}}</div>
+      <div class="flex flex-wrap font-medium lg:rounded-full bg-gray-200">
+          <div style="padding:.56rem 0;" :class="{'active-page':pagination.currentOrderPage == index}" v-for="index in pagination.last_page" :key="index" @click="page(index)"
+              class="w-12 md:flex block justify-center items-center  cursor-pointer leading-5 transition duration-150 ease-in  rounded-full  ">
+             <span class="block text-center"> {{index}}</span>
+              </div>
+
           </div>
 
         </div>
       </div>
       <!-- Pagination Ends -->
 
+
+
+
     </div>
 
+<div class="empty-state mt-8"  v-if="currentTab=='order' && orders.length==0">
+<h1 class="text-red-500 font-bold text-2xl text-center">{{$t('account.no_gift')}}</h1>
+</div>
 
+
+  <Gift v-if="currentTab=='gift'" key="1"/>
+</transition>
   </div>
 
 </template>
@@ -146,20 +161,13 @@ export default {
   },
   data() {
     return {
+      currentTab:'order',
       swiperOption: {
         slidesPerView: 3,
         spaceBetween: -10,
         slidesPerGroup: 3,
         loop: true,
         loopFillGroupWithBlank: true,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
         breakpoints: {
           1024: {
             slidesPerView: 4,
@@ -186,11 +194,11 @@ export default {
           last_page:1
       },
 
+
     }
   },
   async fetch() {
     try {
-      // Using the nuxtjs/http module here exposed via context.app
       const orders = await this.$axios.$get(`/api/auth/ordersall/${this.$i18n.locale}?page=${this.pagination.currentOrderPage}`)
       this.orders = orders.data;
       this.pagination.last_page = orders.last_page;
@@ -200,7 +208,15 @@ export default {
     }
 
   },
+  created(){
+console.log(this.currentTab);
+
+  },
   methods:{
+  
+    changeTab(tab){
+      this.currentOrderPage = tab;
+    },
       page(index){
           this.pagination.currentOrderPage = index;
           this.$fetch();

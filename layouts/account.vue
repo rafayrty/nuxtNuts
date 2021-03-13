@@ -1,5 +1,7 @@
 <template>
       <div :dir="$dir()">
+        <vue-confirm-dialog></vue-confirm-dialog>
+
  <HeaderMain/>
 <div class="account-section mt-8">
     <div class="container account-container lg:grid">

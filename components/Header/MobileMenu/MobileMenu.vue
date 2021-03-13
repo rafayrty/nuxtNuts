@@ -5,7 +5,7 @@
      <div class="mob-menu flex justify-between items-center py-6 lg:hidden" v-bind:style="[showSearchInput ? {'opacity':'0'} : {'opacity':'1'}]">
 
           <div class="menu-icon front-menu-icon" >
-              <a href="#" @click="openMenu($event)">
+              <a href="#" @click.prevent="openMenu($event)">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="9" y="9" width="30" height="30" rx="6" fill="white" />
               <path  fill-rule="evenodd" clip-rule="evenodd"
@@ -26,7 +26,7 @@
 
 
           <div class="search-icon">
-    <a href="#" @click="showSearch()">
+    <a href="#" @click.prevent="showSearch()">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="24" cy="24" r="17" fill="#E4F3D9" />
               <path
@@ -66,7 +66,7 @@
   
 
           <div v-if="!isLoggedIn" class="account" @click="openAccount()">
-<a href="#">
+<a href="javascript:void(0)">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="24" cy="24" r="17" fill="#E4F3D9" />
               <path fill-rule="evenodd" clip-rule="evenodd"
@@ -92,9 +92,14 @@
 </nuxt-link>
           </div>
 
-        <div @click="openCart()" class="cart">
-          <a href="#">
+        <div @click="openCart()" class="cart relative">
+              <span class="flex h-3 w-3 absolute ping-icon" v-if="totalPrice != 0">
+  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+  <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+</span>
+          <a href="javascript:void(0)" >
 
+             
           
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="26" cy="24" r="17" fill="#E4F3D9" />
@@ -121,16 +126,22 @@
 
             <div class=" flex bg-white rounded-full mx-autoshadow-lg " >
 
-            <input type="text" v-model="searchQuery" @input="startSearch()" :placeholder="$t('search')" class="placeholder-green-500 rounded-full px-4 w-full outline-none bg-white">
-            <span>
-             <svg  width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <input type="text" v-model="searchQuery" @input="startSearch()" :placeholder="$t('search')" class="placeholder-green-500 border-none focus:border-green-500 focus:ring-0 rounded-full  px-4 w-full outline-none bg-white">
+            <span class="bg-green-300 mx-3 my-2  text-green-600 px-2 text-center block py-2 rounded-full">
+             <!-- <svg  width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="24" cy="24" r="17" fill="#E4F3D9" />
               <path
                 d="M20.8516 26.1485C23.4019 28.6989 27.5369 28.6989 30.0872 26.1485C32.6376 23.5981 32.6376 19.4632 30.0872 16.9128C27.5369 14.3624 23.4019 14.3624 20.8516 16.9128C18.3012 19.4632 18.3012 23.5981 20.8516 26.1485ZM20.8516 26.1485L15 32"
                 stroke="#79C143" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+            </svg> -->
+            <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" fill="none" class="h-5 w-5" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+</svg>
 
-      
+      <svg v-if="loading"  class="animate-spin  h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg> 
             </span>
                         </div>
 
@@ -177,8 +188,8 @@
 
                   </div>
                 </div>
-                <div class="show-all cursor-pointer bg-blue-300 text-blue-600 rounded-b-xl">
-                  <p class="font-bold text-lg text-center"> Show All Results</p>
+                <div class="show-all cursor-pointer py-1 bg-blue-300 text-blue-600 rounded-b-xl">
+                  <a @click.prevent="openSearch" class="block font-bold text-md text-center"> {{$t('show_all_results')}}</a>
                 </div>
 
 
@@ -203,7 +214,7 @@
 
 <div class="top-bar flex items-center ">
     <div class="menu-icon" @click="hideMenu()">
-              <a href="#" class="inline-block bg-green-500">
+              <a href="javascript:void(0)" class="inline-block bg-green-500">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="9" y="9" width="30" height="30" rx="6" fill="white" />
               <path id="leaf" fill-rule="evenodd" clip-rule="evenodd"
@@ -221,14 +232,14 @@
             </svg>
             </a>
           </div>
-          <a href="#" class="fb ltr:ml-8 rtl:mr-8 mx-2">
+          <a href="javascript:void(0)" class="fb ltr:ml-8 rtl:mr-8 mx-2">
               
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M10.0001 0C4.47724 0 0 4.49595 0 10.0419C0 15.0159 3.60522 19.1352 8.33225 19.9329V12.1369H5.91994V9.33139H8.33225V7.26274C8.33225 4.86251 9.79213 3.55453 11.9247 3.55453C12.9461 3.55453 13.8238 3.63095 14.0786 3.66461V6.17349L12.5995 6.17421C11.44 6.17421 11.2165 6.7274 11.2165 7.53946V9.32996H13.9832L13.6223 12.1354H11.2165V20C16.1642 19.3953 20 15.171 20 10.039C20 4.49595 15.5228 0 10.0001 0Z" fill="#51808E"/>
 </svg>
 
           </a>
-<a href="#" class="ig mx-2">
+<a href="javascript:void(0)" class="ig mx-2">
               
 
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -261,41 +272,45 @@
 <ul>
     <li class="py-2 ltr:pl-20 rtl:pr-20 border-b border-gray-200 text-blue-500 text-md"><a href="">{{$t('home')}}</a></li>
     <li class="py-2 ltr:pl-20 rtl:pr-20 border-b border-gray-200 text-blue-500 text-md"><a href="">{{$t('account_text')}}</a></li>
-    <li class="py-2 ltr:pl-20 rtl:pr-20 border-b border-gray-200 text-blue-500 text-md"><a href="">Blog</a></li>
+    <li class="py-2 ltr:pl-20 rtl:pr-20 border-b border-gray-200 text-blue-500 text-md"><nuxt-link :to="localePath('/blog')" >Blog</nuxt-link></li>
     <li class="py-2 ltr:pl-20 rtl:pr-20 border-b border-gray-200 text-blue-500 text-md"><a href="">{{$t('terms')}}</a></li>
     <li class="py-2 ltr:pl-20 rtl:pr-20 border-b border-gray-200 text-blue-500 text-md"><a href="">{{$t('about')}}</a></li>
-    <li class="py-2 ltr:pl-20 rtl:pr-20 border-b border-gray-200 text-blue-500 text-md"><a href="">{{$t('contact')}}</a></li>
+    <li class="py-2 ltr:pl-20 rtl:pr-20 border-b border-gray-200 text-blue-500 text-md"><nuxt-link :to="localePath('/contact')" >{{$t('contact')}}</nuxt-link></li>
 
 </ul>
 
 </nav>
 
 <ul class="categories-menu ltr:pl-12 mt-12 ltr:pr-6 rtl:pr-12 rtl:pl-6">
-<li class="menu-cat-item sub-menu item-1" @click="openSubMenu('item-1')" v-for="category in categories" :key="category.id">
-  <a href="#" class="flex items-center justify-between " >
-    <div class="start flex items-center"> <span>
+<li class="menu-cat-item sub-menu item-1" v-for="category in mobileCategory" :key="category.id">
+           <div class="start flex items-center"> 
 
-        <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M14.6561 10.1409L8.99779 17.1268C8.50268 17.7089 7.92506 18 7.26492 18C6.67551 18 6.16861 17.8181 5.74424 17.4542L0.828545 13.1972C0.357016 12.7606 0.085885 12.2148 0.0151558 11.5599C-0.0555744 10.9535 0.12125 10.3592 0.545627 9.77707L6.20398 2.79122C6.81697 1.9665 7.61857 1.44499 8.60878 1.22668L13.5245 0.0623737C13.996 -0.0831649 14.444 0.025989 14.8683 0.389835L15.4695 0.935605C15.8232 1.20243 16 1.63904 16 2.24545L15.7171 7.44845C15.5992 8.49148 15.2456 9.38897 14.6561 10.1409ZM13.8074 1.55414L8.82097 2.79122C8.30228 2.9125 7.7836 3.23997 7.26492 3.77361L1.60657 10.7595C1.41796 10.9535 1.35901 11.1718 1.42974 11.4144C1.42974 11.5599 1.53584 11.7661 1.74803 12.0329L6.66372 16.2899C6.82875 16.4355 7.02915 16.5022 7.26492 16.49C7.50068 16.4779 7.67751 16.3869 7.79539 16.2172L13.4537 9.2313C13.9017 8.64915 14.1257 8.05487 14.1257 7.44845L14.4793 2.09991L13.8074 1.55414ZM11.7916 4.10107C11.7916 4.31938 11.8623 4.5013 12.0038 4.64684C12.1452 4.79238 12.3221 4.86515 12.5343 4.86515C12.7464 4.86515 12.9233 4.79238 13.0647 4.64684C13.2062 4.5013 13.2769 4.31938 13.2769 4.10107C13.2769 3.88276 13.2062 3.70084 13.0647 3.5553C12.9233 3.40976 12.7464 3.33699 12.5343 3.33699C12.3221 3.33699 12.1452 3.40976 12.0038 3.5553C11.8623 3.70084 11.7916 3.88276 11.7916 4.10107ZM11.4026 9.52238L4.47111 11.7782H4.22356C3.89349 11.7782 3.64593 11.5963 3.4809 11.2325C3.41017 11.0384 3.42196 10.8444 3.51626 10.6503C3.61057 10.4563 3.75203 10.3228 3.94064 10.2501L10.8721 7.99422C11.0607 7.8972 11.2552 7.8972 11.4556 7.99422C11.656 8.09125 11.7916 8.23679 11.8623 8.43084C12.0038 8.98874 11.8505 9.35258 11.4026 9.52238ZM5.74424 13.0153C5.74424 13.3306 5.85033 13.6035 6.06252 13.834C6.27471 14.0644 6.54584 14.1796 6.87591 14.1796C7.20598 14.1796 7.47711 14.0644 7.6893 13.834C7.90148 13.6035 8.00758 13.3306 8.00758 13.0153C8.00758 12.7 7.89559 12.4271 7.67161 12.1967C7.44764 11.9662 7.1824 11.851 6.87591 11.851C6.56941 11.851 6.30418 11.9662 6.0802 12.1967C5.85623 12.4271 5.74424 12.7 5.74424 13.0153ZM8.00758 6.82992C8.00758 7.14525 8.11957 7.41813 8.34354 7.64857C8.56752 7.87901 8.83275 7.99422 9.13925 7.99422C9.44574 7.99422 9.71098 7.87901 9.93495 7.64857C10.1589 7.41813 10.2709 7.14525 10.2709 6.82992C10.2709 6.51458 10.1648 6.2417 9.95264 6.01126C9.74045 5.78083 9.46932 5.66561 9.13925 5.66561C8.80918 5.66561 8.53805 5.78083 8.32586 6.01126C8.11367 6.2417 8.00758 6.51458 8.00758 6.82992Z"
-            fill="#51808E" />
-        </svg>
+        <span v-html="category.icon"></span>
+<div class="left flex items-center justify-between w-full">
 
-      </span><strong class="font-semibold mx-2">{{category.title}}</strong> </div><span>
+  <a href="javascript:void(0)"  @click="openSubMenu($event)"  class="block items-center font-semibold mx-2 justify-between " >
+  {{category.title}}
+
+   
+
+  </a>
+<div class="chevron">
         
-<svg width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg style="transform:rotate(180deg)" width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M1 0.5L4.5 4L1 7.5" stroke="#E0E0E0" stroke-linejoin="round"/>
 </svg>
 
-    </span>
-  </a>
+</div>
+
+</div>
+
+
+    </div>
+
+
   <ul class="sub-menu-list  font-semibold text-sm ltr:pl-6 rtl:pr-6 my-4 hidden" >
-      <li class="mt-1"><a href="#">Sweets</a></li>
-      <li class="mt-1"><a href="#">Waffle & Bisquets</a></li>
-      <li class="mt-1"><a href="#">Sweet snacks</a></li>
-      <li class="mt-1"><a href="#">Cakes and Bisquet</a></li>
-      <li class="mt-1"><a href="#">Salty snacks</a></li>
-      <li class="mt-1"><a href="#">Gluten-free</a></li>
+
+      <li class="mt-1" v-for="cat in category.parent" :key="cat.id"><a href="#">{{cat.title}}</a></li>
 
   </ul>
     
@@ -333,6 +348,13 @@
 
         </div>
 </template>
+<style scoped>
+.ping-icon{
+top:15%;
+left:16%;
+z-index:3;
+}
+</style>
 <style>
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
@@ -371,31 +393,61 @@ export default {
       searchQuery:'',
       results:[],
       loading:false,
-            showSearchInput:false,
-            tl:'',
+      showSearchInput:false,
+      tl:'',
+      mobileCategory:[],
 
         }
     },computed:{
          isLoggedIn(){
-return this.$store.getters['auth/isLoggedIn'];
-    },
-availableLocales () {
-    return this.$i18n.locales.filter(i => i.code !== this.$i18n.locale)
-},
-currentLocale(){
-  if(this.$i18n.locale=='en'){
-    return 'English';
-  }else if(this.$i18n.locale=='he'){
-    return 'Hebrew';
-  }else if(this.$i18n.locale=='ar'){
-    return 'Arabic';
-  }
+            return this.$store.getters['auth/isLoggedIn'];
+        },
+        availableLocales () {
+            return this.$i18n.locales.filter(i => i.code !== this.$i18n.locale)
+         },
+  currentLocale(){
+     if(this.$i18n.locale=='en'){
+      return 'English';
+     }else if(this.$i18n.locale=='he'){
+       return 'Hebrew';
+     }else if(this.$i18n.locale=='ar'){
+      return 'Arabic';
+     }
   
-  },categories(){
-   return this.$store.getters.categories;
-  }
-  },   
+    },
+     categories(){
+      return this.$store.getters.categories;
+     },
+     totalPrice(){
+           return this.$store.getters['cart/totalPrice'];
+     },
+        childCategories(){
+             return this.$store.getters.ChildCategories;
+        }
+},   
   mounted(){
+    let i = 0;
+    let category = JSON.parse(JSON.stringify(this.childCategories));
+    let categories = JSON.parse(JSON.stringify(this.categories));
+categories.forEach(cat => {
+  // if(this.childCategories[i]!=undefined){
+  // if(cat.category_id == this.childCategories[i].parent){
+  //   cat.parent = this.childCategories[i];
+  //       console.log(this.childCategories[i].parent)
+
+  // }
+  if(category.filter(x => x.parent == cat.id)){
+    cat.parent = category.filter(x => x.parent == cat.id);
+  }
+
+  i= i + 1;;
+});
+this.mobileCategory = categories;
+console.log("From Mobile",this.categories);
+
+
+
+
     window.addEventListener('resize',()=>{
   if(this.$i18n.locale=='he' || this.$i18n.locale=='ar'){ 
    document.querySelector('.side-menu').style.right = "-100%";
@@ -425,21 +477,35 @@ currentLocale(){
       this.hideSearch();
       this.results = [];
     },
+
         showSearch(){
             this.showSearchInput = true;
         },
         hideSearch(){
             this.showSearchInput = false;
         },
-        openSubMenu(className){
-          document.querySelector(`.${className}`).children[1].classList.toggle('hidden');
-         document.querySelector(`.${className}`).children[0].children[1].classList.toggle('opened-arrow');
+
+        openSearch(){
+      this.results = [];
+      this.$router.push(this.localePath({path:`/search?search=${this.searchQuery}`}))
+         },
+
+
+        openSubMenu(e){
+          e.target.parentElement.parentElement.parentElement.children[1].classList.toggle('hidden');
+          // e.target.children[1].classList.toggle('hidden');
+          // e.target.children[0].children[1].classList.toggle('opened-arrow');
+
+        //   document.querySelector(`.${className}`).children[1].classList.toggle('hidden');
+        //  document.querySelector(`.${className}`).children[0].children[1].classList.toggle('opened-arrow');
+
         },
          openAccount(){
     this.$emit('open-modal')
     },
         openMenu(e){
             this.tl = gsap.timeline(); 
+            
             this.tl.set('.side-menu .menu-icon',{opacity:'0'})
               if(this.$i18n.locale=='he' || this.$i18n.locale=='ar'){
             this.tl.set('.side-menu',{right:'-100%'})

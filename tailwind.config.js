@@ -43,12 +43,16 @@ module.exports = {
     extend: {},
   },
   variants: {
+    opacity: ['disabled'],
+    cursor:['responsive','disabled'],
     float: ['responsive', 'direction'],
     margin: ['responsive', 'direction'],
     padding: ['responsive', 'direction'],
     borderWidth:['responsive','direction']
   },
   plugins: [
+    require('@tailwindcss/forms'),
     require('tailwindcss-dir')(),
+  
   ],
 }

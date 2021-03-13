@@ -16,15 +16,30 @@
 <div class="gift mt-4">
     
 <h4 class="text-lg font-bold text-gray-500">{{$t('cart.or')}}</h4>
-<nuxt-link :to="localePath('/cart/gift')">
+<transition name="slide-fade" mode="out-in">
+<nuxt-link key="0" v-if="!giftAddress" :to="localePath('/cart/gift')">
 <button class="mt-4 bg-yellow-500 text-white py-2 px-4 cursor-pointer border font-semibold border-yellow-500 hover:bg-white hover:text-yellow-500 transition duration-200">{{$t('cart.gift')}}</button>
 </nuxt-link>
+
+<!-- <button @click="useAddress()" v-if="giftAddress" key="1"  class="group font-bold text-lg transition duration-300 relative flex items-center justify-center py-3 px-10 border border-transparent rounded-md text-white submit-login bg-green-500  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+
+<svg class="h-5 ml-2 ltr:mr-2 w-5 text-white-500 group-hover:text-white"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+</svg>
+
+{{$t('cart.user_address')}} 
+  </button> -->
+
+
+</transition>
 </div>
+<transition name="slide-fade" mode="out-in">
+<div class="addresses-list mt-8" key="0" v-if="!giftAddress">
+  <transition name="slide-fade" mode="out-in">
+      <transition-group class="relative" v-if="addresses.length!=0" name="list"  tag="ul">
 
-<div class="addresses-list mt-8">
-      <transition-group name="list-complete" tag="div">
-
-<div class="address-list bg-white shadow-lg  transition duration-600"  v-for="(address,index) in addresses" :key="address.id" :class="{'selected-address':selectedAddress == address.id}">
+<li class="address-list bg-white shadow-lg  transition duration-600"  v-for="(address,index) in addresses" :key="address.id" :class="{'selected-address':selectedAddress == address.id}">
 <div class="list-header shadow-md  bg-gray-100 text-blue-500 font-semibold py-1 px-4 lg:px-8 font-xs">
     Address {{index+1}}
 </div>
@@ -49,7 +64,7 @@
 
         </div>
         <div class="delete mr-4 ltr:ml-4">
-<a href="javascript:void(0)">
+<a href="javascript:void(0)" @click="deleteAddress(address.id,index)">
     
 <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="0.5" y="0.5" width="26" height="26" rx="5.5" fill="white" stroke="#EB5757"/>
@@ -65,13 +80,39 @@
 </div>
 
 
-</div>
+</li>
       </transition-group>
+<div key="1" class="empty-state mt-8" v-if="addresses.length==0">
+  <h1 class="text-red-500 font-bold text-2xl text-center">{{$t('account.no_addresses')}}</h1>
+</div>
+</transition>
 
 </div>
 
 
+<div class="gift-address mt-8 flex justify-center" key="1" v-else>
 
+<div class="address py-4 w-full lg:w-auto shadow-md cursor-pointer hover:shadow-none transition duration-300 relative inline-block bg-yellow-200">
+<a href="#" @click.prevent="useAddress" class="close text-white bg-red-600 absolute flex items-center p-1 hover:bg-red-800 hover:shadow-md transition duration-300 justify-center text-2xl rounded-full h-8 w-8 cursor-pointer">
+ <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+</svg>
+    </a>
+
+
+    
+<h1 class="text-2xl px-6 lg:px-12  font-bold">Gift Address</h1>
+<hr class="mt-4 bg-black text-black border-black">
+<p class="mt-4  px-6 lg:px-12 ">
+  {{giftAddress.first_name}}, {{giftAddress.last_name}}<br/>
+  {{giftAddress.address}}, {{giftAddress.phone}}
+</p>
+
+</div>
+
+</div>
+
+</transition>
 </div>
 
 
@@ -79,26 +120,45 @@
 
 </template>
 <style>
-.list-complete-item {
-  transition: all 1s;
-  display: inline-block;
-  margin-right: 10px;
+.list-enter-active,
+.list-leave-active,
+.list-move {
+  transition: 500ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
+  transition-property: opacity, transform;
 }
-.list-complete-enter, .list-complete-leave-to
-/* .list-complete-leave-active below version 2.1.8 */ {
+
+.list-enter {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateX(-50px) scaleY(0.5);
 }
-.list-complete-leave-active {
+
+.list-enter-to {
+  opacity: 1;
+  transform: translateX(0) scaleY(1);
+}
+
+.list-leave-active {
   position: absolute;
+  width:100%;
+}
+
+.list-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: center top;
 }
 .address-list:not(:first-child){
     margin-top:2.2rem;
 }
+
 </style>
 <style lang="scss" scoped>
 .selected-address{
     @apply bg-green-500 text-white;
+}
+.close{
+  top:-9%;
+  left:-3%;
 }
 
 </style>
@@ -125,6 +185,11 @@ export default {
            return this.$store.getters['cart/totalPrice'];
 
         },
+
+        giftAddress(){
+          return this.$store.getters['cart/getGift'];
+        },
+
     },
     async asyncData(context){
         try {
@@ -153,7 +218,31 @@ export default {
                 this.$toast.show('An Error Occurred',{type:'error',duration:5000});
                 console.log(e);
             });
+        },
+        editAddress(id){
+          this.$router.push(this.localePath({path:`/account/address/edit/${id}`}));
+        },
+        useAddress(){
+          this.$store.dispatch('cart/resetShipping');
+        },
+      async deleteAddress(id, index) {
+      this.$confirm({
+          auth: false,
+          title: 'Are you sure?',
+          message: `You Want To Delete This Address`,
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+        callback: (confirm) =>{
+          if(confirm){
+            this.addresses.splice(index, 1);
+          }
         }
+       
+      })
+          //  await this.$axios.$get(`/api/auth/address/delete/${id}`);
+       }
     }
 
 }

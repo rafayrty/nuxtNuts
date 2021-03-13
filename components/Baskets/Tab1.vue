@@ -25,7 +25,7 @@
     <style scoped>
     .radio-btn{
     height: 30px;
-    width: 100%;
+    width: 30px;
     cursor:pointer;
     }
     </style>
@@ -41,7 +41,10 @@
 
 
   <div v-for="basket in baskets" :key="basket.id" class="basket relative border-gray-500 hover:shadow-2xl transition duration-300 border pt-6 my-6 lg:py-6 lg:pb-12 rounded-xl" >
+<div class="radio-btn-container text-center">
 <input type="radio" v-model="selectedBasket" :value="basket.basket_id"  name="basketSelected" class="radio-btn">
+
+</div>
 
   <img :src="basket.image" alt="">
  <div class="basket-info bg-green-500 rounded-full w-full lg:w-9/12 mx-auto">

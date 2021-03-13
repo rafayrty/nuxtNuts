@@ -31,7 +31,6 @@
 
 <div class="cart-items pb-12">
 <perfect-scrollbar>
-  <transition-group name="list-complete" tag="div">
 
   <div class="cart-item mt-4 mx-6 p-4 rounded-xl" v-for="cartItem in cartItems" :key="cartItem.name">
      <div class="cart-item-main">
@@ -96,7 +95,6 @@
 
  </div>
 
-  </transition-group>
 
   <div class="cart-item mt-4 mx-6 p-4 rounded-xl" v-for="basketItem in basketItems" :key="basketItem.title">
      <div class="basket-item-main">
@@ -108,8 +106,8 @@
     </div>
     <div class="cart-item-details ltr:ml-4 rtl:mr-4 my-1 flex flex-col justify-between">
         <h3 class="name font-bold text-lg">{{basketItem.name}}</h3>
-<div class="prd-images flex">
-    <img v-for="image in basketItem.images" :key="image"  class="w-6 h-6 border border-gray-500 rounded-full mx-1" :src="image" alt="">
+<div class="prd-images flex flex-wrap">
+    <img v-for="image in basketItem.images" :key="image"  class="w-6 mt-2 h-6 border border-gray-500 rounded-full mx-1" :src="image" alt="">
 </div>
 
         <!-- Cart Item Quantitiy -->
@@ -240,11 +238,47 @@ export default {
          this.$store.dispatch('cart/subtractAmountBasket',id);
         },
         deleteProduct(id){
+         this.$confirm({
+          auth: false,
+          title: 'Are you sure?',
+          message:"You Want To Delete This Cart Item",
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+        callback: (confirm) =>{
+          if(confirm){
             this.$store.dispatch('cart/deleteProduct',id);
-            this.$toast.show('Product Has Been Removed From Cart',{type:'error',duration:3000});
-        },     deleteBasket(id){
-            this.$store.dispatch('cart/deleteBasket',id);
-            this.$toast.show('Basket Has Been Removed From Cart',{type:'error',duration:3000});
+            this.$toast.show( this.$t('messages.cart_delete'),{type:'error',duration:3000});
+          }
+        }
+       
+      })
+            // this.$store.dispatch('cart/deleteProduct',id);
+            // this.$toast.show('Product Has Been Removed From Cart',{type:'error',duration:3000});
+        }, 
+        deleteBasket(id){
+
+                    this.$confirm({
+          auth: false,
+          title: 'Are you sure?',
+          message:"You Want To Delete This Cart Item",
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+        callback: (confirm) =>{
+          if(confirm){
+             this.$store.dispatch('cart/deleteBasket',id);
+             this.$toast.show( this.$t('messages.cart_delete'),{type:'error',duration:3000});
+          }
+        }
+       
+      })
+
+
+            // this.$store.dispatch('cart/deleteBasket',id);
+            // this.$toast.show('Basket Has Been Removed From Cart',{type:'error',duration:3000});
         },
         closed(){
             document.querySelector('body').style.overflowY = "auto";
@@ -256,6 +290,33 @@ export default {
 
 <style scoped>
 
+.list-enter-active,
+.list-leave-active,
+.list-move {
+  transition: 500ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
+  transition-property: opacity, transform;
+}
+
+.list-enter {
+  opacity: 0;
+  transform: translateX(-50px) scaleY(0.5);
+}
+
+.list-enter-to {
+  opacity: 1;
+  transform: translateX(0) scaleY(1);
+}
+
+.list-leave-active {
+  position: absolute;
+  width:100%;
+}
+
+.list-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: center top;
+}
 .cart-modal .cart-item{
     box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
 }

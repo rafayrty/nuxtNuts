@@ -5,18 +5,19 @@
       <div class="topbar flex justify-between py-4">
         <div class="socials-lang flex items-center">
           <div class="mx-2">
+           <a :href="info.insta">
 
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="20" height="20"  class="transform transition duration-300 hover:scale-125 " viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M10.0001 0C4.47724 0 0 4.49595 0 10.0419C0 15.0159 3.60522 19.1352 8.33225 19.9329V12.1369H5.91994V9.33139H8.33225V7.26274C8.33225 4.86251 9.79213 3.55453 11.9247 3.55453C12.9461 3.55453 13.8238 3.63095 14.0786 3.66461V6.17349L12.5995 6.17421C11.44 6.17421 11.2165 6.7274 11.2165 7.53946V9.32996H13.9832L13.6223 12.1354H11.2165V20C16.1642 19.3953 20 15.171 20 10.039C20 4.49595 15.5228 0 10.0001 0Z"
                 fill="white" />
             </svg>
-
+               </a>
           </div>
           <div class="mx-2">
+          <a :href="info.fb" >
 
-
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="20" height="20" class="transform transition duration-300 hover:scale-125 " viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M8.02892 10.0001C8.02892 11.0869 8.91319 11.971 10 11.971C11.0868 11.971 11.9711 11.0869 11.9711 10.0001C11.9711 8.91319 11.0869 8.02899 10 8.02899C8.91312 8.02899 8.02892 8.91319 8.02892 10.0001Z"
                 fill="white" />
@@ -27,7 +28,7 @@
                 d="M20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10ZM7.38618 4.16667H12.6137C14.3891 4.16667 15.8334 5.61101 15.8333 7.38624V12.6138C15.8333 14.389 14.3891 15.8333 12.6137 15.8333H7.38618C5.61094 15.8333 4.16667 14.3891 4.16667 12.6138V7.38624C4.16667 5.61101 5.61094 4.16667 7.38618 4.16667Z"
                 fill="white" />
             </svg>
-
+               </a>
           </div>
           <div class="mx-2">
 
@@ -58,7 +59,7 @@
         <div class="top-nav text-white">
 
           <ul class="flex">
-            <li class="mx-2"><a href="">Blog</a></li>
+            <li class="mx-2"><nuxt-link :to="localePath('/blog')" >Blog</nuxt-link></li>
             <li class="mx-2"><a href="">{{$t('about')}}</a></li>
             <li class="mx-2"><a href="">{{$t('terms')}}</a></li>
             <li class="mx-2"><a href="">{{$t('contact')}}</a></li>
@@ -101,7 +102,7 @@
 
           <div class="search relative border-green-500 shadow-md rounded-md border-solid border flex h-12">
             <input type="search" name="search" v-model="searchQuery"
-              class="w-full h-full block placeholder-green-500 placeholder-opacity-60 font-semibold focus:font-normal  rounded-md px-4 py-2  outline-none	"
+              class="w-full h-full block border-none focus:border-none focus:ring-0 placeholder-green-500 placeholder-opacity-60 font-semibold focus:font-normal  rounded-md px-4 py-2  outline-none	"
               @input="startSearch" :placeholder="$t('search')" id="">
             <button type="submit">
               <span class="inset-y-0 right-0 flex items-center pl-2 mr-1">
@@ -162,8 +163,8 @@
 
                   </div>
                 </div>
-                <div class="show-all cursor-pointer bg-blue-300 text-blue-600 rounded-b-xl">
-                  <p class="font-bold text-lg text-center"> Show All Results</p>
+                <div class="show-all cursor-pointer bg-blue-300 py-1 text-blue-600 rounded-b-xl">
+                  <a @click.prevent="openSearch" class="block font-bold text-md text-center"> {{$t('show_all_results')}}</a>
                 </div>
 
 
@@ -180,8 +181,12 @@
               </div>
 
               <div @click="openCart()"
-                class="cart-icon ltr:ml-6 rtl:mr-6 bg-green-100 cursor-pointer hover:bg-blue-100 transition duration-200 rounded-full p-2 h-10 w-10 flex justify-center items-center">
-                <a href="#">
+                class="cart-icon relative ltr:ml-6 rtl:mr-6 bg-green-100 cursor-pointer hover:bg-blue-100 transition duration-200 rounded-full p-2 h-10 w-10 flex justify-center items-center">
+    <span class="flex h-3 w-3 absolute top-0 left-0" v-if="totalPrice != 0">
+  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+  <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+</span>
+                <a href="javascript:void(0)">
                   <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M6.46 14.1395C6.46 15.167 5.60934 16 4.56 16C3.51066 16 2.66 15.167 2.66 14.1395C2.66 13.112 3.51066 12.2791 4.56 12.2791C5.60934 12.2791 6.46 13.112 6.46 14.1395Z"
@@ -200,7 +205,7 @@
             </div>
             <div v-if="!isLoggedIn" @click.prevent="openAccount()"
               class="user mx-6  bg-green-100 cursor-pointer hover:bg-blue-100 transition duration-200 rounded-full p-2 h-10 w-10 flex justify-center items-center">
-              <a href="#">
+              <a href="javascript:void(0)">
 
                 <svg width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd"
@@ -235,7 +240,7 @@
           <div class="left flex items-center">
 
             <div class="categories">
-              <a href="#" class="flex items-center cursor-pointer" @mouseover="showMenu()">
+              <a href="javascript:void(0)" class="flex items-center cursor-pointer" @mouseover="showMenu()">
                 <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1 1H15M1 4H15M1 7H8" stroke="#79C143" stroke-linecap="round" />
                 </svg>
@@ -267,7 +272,7 @@
               </div>
               <div
                 class="email font-semibold ltr:border-l rtl:border-r border-blue-500 ltr:ml-2 ltr:pl-2 rtl:mr-2 rtl:pr-2">
-                <a href="mailto:info@naznuts.com">Info@naznuts.com</a>
+                <a :href="`mailto:${info.email}`">{{info.email}}</a>
 
               </div>
             </div>
@@ -288,7 +293,7 @@
               <div
                 class="parent ltr:border-r-2 rtl:border-l-2 border-blue-500 ltr:pr-8 rtl:pl-8  p-4 px-6 col-start-1	col-end-3">
                 <!-- Categories Heading -->
-                <a href="#" class="flex items-center cursor-pointer">
+                <a href="javascript:void(0)" class="flex items-center cursor-pointer">
                   <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1H15M1 4H15M1 7H8" stroke="#BDBDBD" stroke-linecap="round" />
                   </svg>
@@ -297,19 +302,13 @@
                 <ul class="categories-list mt-6 pb-4">
                   <li class="category-item mt-2 hover:text-green-500" v-for="category in categories" :key="category.id">
 
-                    <a href="" class="flex items-center justify-between">
-                      <div class="start flex items-center"> <span>
+                    <a href="javascript:void(0)" class="flex items-center justify-between">
+                      <div class="start flex items-center"> <span  v-html="category.icon"></span>
+                      
+                      <strong class="font-semibold mx-2" @mouseenter="showChild(category.id)" >{{category.title}}</strong> </div>
+                      <span style="transform:rotate(180deg)">
 
-                          <svg width="16" height="18" viewBox="0 0 16 18" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                              d="M14.6561 10.1409L8.99779 17.1268C8.50268 17.7089 7.92506 18 7.26492 18C6.67551 18 6.16861 17.8181 5.74424 17.4542L0.828545 13.1972C0.357016 12.7606 0.085885 12.2148 0.0151558 11.5599C-0.0555744 10.9535 0.12125 10.3592 0.545627 9.77707L6.20398 2.79122C6.81697 1.9665 7.61857 1.44499 8.60878 1.22668L13.5245 0.0623737C13.996 -0.0831649 14.444 0.025989 14.8683 0.389835L15.4695 0.935605C15.8232 1.20243 16 1.63904 16 2.24545L15.7171 7.44845C15.5992 8.49148 15.2456 9.38897 14.6561 10.1409ZM13.8074 1.55414L8.82097 2.79122C8.30228 2.9125 7.7836 3.23997 7.26492 3.77361L1.60657 10.7595C1.41796 10.9535 1.35901 11.1718 1.42974 11.4144C1.42974 11.5599 1.53584 11.7661 1.74803 12.0329L6.66372 16.2899C6.82875 16.4355 7.02915 16.5022 7.26492 16.49C7.50068 16.4779 7.67751 16.3869 7.79539 16.2172L13.4537 9.2313C13.9017 8.64915 14.1257 8.05487 14.1257 7.44845L14.4793 2.09991L13.8074 1.55414ZM11.7916 4.10107C11.7916 4.31938 11.8623 4.5013 12.0038 4.64684C12.1452 4.79238 12.3221 4.86515 12.5343 4.86515C12.7464 4.86515 12.9233 4.79238 13.0647 4.64684C13.2062 4.5013 13.2769 4.31938 13.2769 4.10107C13.2769 3.88276 13.2062 3.70084 13.0647 3.5553C12.9233 3.40976 12.7464 3.33699 12.5343 3.33699C12.3221 3.33699 12.1452 3.40976 12.0038 3.5553C11.8623 3.70084 11.7916 3.88276 11.7916 4.10107ZM11.4026 9.52238L4.47111 11.7782H4.22356C3.89349 11.7782 3.64593 11.5963 3.4809 11.2325C3.41017 11.0384 3.42196 10.8444 3.51626 10.6503C3.61057 10.4563 3.75203 10.3228 3.94064 10.2501L10.8721 7.99422C11.0607 7.8972 11.2552 7.8972 11.4556 7.99422C11.656 8.09125 11.7916 8.23679 11.8623 8.43084C12.0038 8.98874 11.8505 9.35258 11.4026 9.52238ZM5.74424 13.0153C5.74424 13.3306 5.85033 13.6035 6.06252 13.834C6.27471 14.0644 6.54584 14.1796 6.87591 14.1796C7.20598 14.1796 7.47711 14.0644 7.6893 13.834C7.90148 13.6035 8.00758 13.3306 8.00758 13.0153C8.00758 12.7 7.89559 12.4271 7.67161 12.1967C7.44764 11.9662 7.1824 11.851 6.87591 11.851C6.56941 11.851 6.30418 11.9662 6.0802 12.1967C5.85623 12.4271 5.74424 12.7 5.74424 13.0153ZM8.00758 6.82992C8.00758 7.14525 8.11957 7.41813 8.34354 7.64857C8.56752 7.87901 8.83275 7.99422 9.13925 7.99422C9.44574 7.99422 9.71098 7.87901 9.93495 7.64857C10.1589 7.41813 10.2709 7.14525 10.2709 6.82992C10.2709 6.51458 10.1648 6.2417 9.95264 6.01126C9.74045 5.78083 9.46932 5.66561 9.13925 5.66561C8.80918 5.66561 8.53805 5.78083 8.32586 6.01126C8.11367 6.2417 8.00758 6.51458 8.00758 6.82992Z"
-                              fill="#51808E" />
-                          </svg>
-
-                        </span><strong class="font-semibold mx-2">{{category.title}}</strong> </div><span>
-
-                        <svg width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="5" height="8"  viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M1 0.5L4.5 4L1 7.5" stroke="#E0E0E0" stroke-linejoin="round" />
                         </svg>
 
@@ -320,18 +319,18 @@
 
                 </ul>
               </div>
-              <div class="children col-start-3 p-4 px-6 rtl:mr-6 ltr:ml-6 pb-4	col-end-9 flex">
-                <ul class="children-categories font-semibold mt-6">
-                  <li class="mt-2 hover:text-green-500"><a href="">Sweets</a></li>
-                  <li class="mt-2 hover:text-green-500"><a href="">Waffle & Bisquets</a></li>
-                  <li class="mt-2 hover:text-green-500"><a href="">Sweet snacks</a></li>
-                  <li class="mt-2 hover:text-green-500"><a href="">Cakes and Bisquet</a></li>
-                  <li class="mt-2 hover:text-green-500"><a href="">Salty snacks</a></li>
-                  <li class="mt-2 hover:text-green-500"><a href="">Gluten-free</a></li>
-                  <li class="mt-2 hover:text-green-500"><a href="">Sugar free</a></li>
-                  <li class="mt-2 hover:text-green-500"><a href="">Sweets</a></li>
+              <div  class="children col-start-3 p-4 px-6 rtl:mr-6 ltr:ml-6 pb-4	col-end-9 flex">
+                <transition name="slide-fade">
+                <ul v-if="childrenCats.length!=0"  class="children-categories font-semibold mt-6">
+                  <li class="mt-2 hover:text-green-500"  v-for="childrenCat in childrenCats" :key="childrenCat.id">
+                    
+                    <a href="">{{childrenCat.title}}</a>
+                    
+                    </li>
+        
 
                 </ul>
+                </transition>
 
 
                 <div class="blog-menu mt-3	 ltr:ml-auto rtl:mr-auto" style="width:70%">
@@ -387,7 +386,8 @@ export default {
       searchQuery:'',
       results:[],
       loading:false,
-      showDeskCat:false
+      showDeskCat:false,
+      childrenCats:[],
     }
   }, computed:{
     isLoggedIn(){
@@ -404,6 +404,9 @@ return this.$store.getters['auth/isLoggedIn'];
 availableLocales () {
     return this.$i18n.locales.filter(i => i.code !== this.$i18n.locale)
 },
+info(){
+return this.$store.getters['info'];
+},
 
 currentLocale(){
   if(this.$i18n.locale=='en'){
@@ -417,6 +420,9 @@ currentLocale(){
   },
   categories(){
    return this.$store.getters.categories;
+  },
+    childCategories(){
+   return this.$store.getters.ChildCategories;
   }
   },
 
@@ -431,7 +437,6 @@ currentLocale(){
        this.$axios.get(`/searchQuery/${this.searchQuery}`).then(res=>{
  this.results = res.data.result;
  this.loading = false;
- console.log(this.results);
 })
 
 
@@ -439,6 +444,14 @@ currentLocale(){
       this.results = [];
 
     }
+    },
+    showChild(id){
+this.childrenCats = this.childCategories.filter(x => x.parent == id);
+
+    },
+    openSearch(){
+      this.results = [];
+      this.$router.push(this.localePath({path:`/search?search=${this.searchQuery}`}))
     },
     openResult(){
       this.results = [];

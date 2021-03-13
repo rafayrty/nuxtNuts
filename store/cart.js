@@ -7,7 +7,8 @@ export const state = () => ({
     subtotal:0,
     discount:0,
     coupon:false,
-    address:''
+    address:'',
+    gift:false
   })
   // getters
   export const getters = {
@@ -26,7 +27,9 @@ export const state = () => ({
     shipping: state => state.shipping,
     address: state => state.address,
     discount:state =>state.discount,
-    coupon: state => state.coupon
+    coupon: state => state.coupon,
+    getAddress:state => state.address,
+    getGift:state => state.gift,
 
   }
   // actions
@@ -186,7 +189,22 @@ if(state.added.find(x => x.id === product.id)){
           return err;
         }
       },
+      
 //Cart Calculations
+async addGift({commit,state},payload){
+
+  return await this.$axios.$get(`/api/address/nuxt/${payload.city}/${state.total}`).then(res=>{
+         commit('UPDATE_SHIPPING',res.price);
+         commit('ADD_GIFT',payload);
+    })
+  
+  
+  },
+
+  resetShipping({commit,state}){
+  commit('RESET_SHIPPING',state);
+  },
+
 
 addShipping({commit,state},payload){
 commit('UPDATE_SHIPPING',payload);
@@ -200,7 +218,7 @@ addCoupon({commit,state},payload){
     },
     removeDiscount({commit,state}){
       commit('REMOVE_DISCOUNT');
-    }
+    },
   
 
 
@@ -210,75 +228,85 @@ addCoupon({commit,state},payload){
   }
 
   export const mutations = {
-      ADD_TO_CART(state,payload){
-          state.added.push(payload);
-      },
-      ADD_TO_CART_BASKET(state,payload){
-        state.addedBaskets.push(payload);
+    ADD_TO_CART(state, payload) {
+      state.added.push(payload);
     },
-    UPDATE_CART_BASKETS(state,payload){
+    ADD_TO_CART_BASKET(state, payload) {
+      state.addedBaskets.push(payload);
+    },
+    UPDATE_CART_BASKETS(state, payload) {
       state.addedBaskets = payload;
 
     },
-      UPDATE_CART_PRODUCTS(state,payload){
-          state.added = payload;
-
-        
-        },
-        UPDATE_AMOUNT(state,payload){
-        
-          state.added.splice(payload.index,1,payload.product);
-        },
-        UPDATE_AMOUNT_BASKET(state,payload){
-        
-          state.addedBaskets.splice(payload.index,1,payload.basket);
-        },
-        REMOVE_PRODUCT(state,payload){
-            state.added.splice(payload,1);
-        },
-        REMOVE_BASKET(state,payload){
-          state.addedBaskets.splice(payload,1);
-      },
-        UPDATE_TOTAL(state,payload){
-            let total = 0;
-            if(payload){
-            payload.products.forEach(product=>{
-              total = total + parseInt(product.price);
-            }) 
-            payload.baskets.forEach(basket=>{
-              total = total + parseInt(basket.price);
-            }) 
-            state.total = total;
-          }
-        },
-        //Address
-        UPDATE_SHIPPING(state,payload){
-        
-          if(payload == 'FREE'){
-            state.shipping = false;
-          }else{
-            state.shipping = parseInt(payload);
-          }
-        },
-
-        ADD_ADDRESS(state,payload){
-          state.address = payload;
-        },
-        //Discounts
-
-        ADD_COUPON(state,payload){
-          state.coupon = payload;
-        },
-        UPDATE_DISCOUNT(state,payload){
-          state.discount = payload;
-        },
-        REMOVE_DISCOUNT(state){
-          state.discount = 0;
-          state.coupon = false;
-        }
+    UPDATE_CART_PRODUCTS(state, payload) {
+      state.added = payload;
 
 
+    },
+    UPDATE_AMOUNT(state, payload) {
 
+      state.added.splice(payload.index, 1, payload.product);
+    },
+    UPDATE_AMOUNT_BASKET(state, payload) {
 
+      state.addedBaskets.splice(payload.index, 1, payload.basket);
+    },
+    REMOVE_PRODUCT(state, payload) {
+      state.added.splice(payload, 1);
+    },
+    REMOVE_BASKET(state, payload) {
+      state.addedBaskets.splice(payload, 1);
+    },
+    UPDATE_TOTAL(state, payload) {
+      let total = 0;
+      if (payload) {
+        payload.products.forEach(product => {
+          total = total + parseInt(product.price);
+        })
+        payload.baskets.forEach(basket => {
+          total = total + parseInt(basket.price);
+        })
+        state.total = total;
       }
- 
+    },
+    //Address
+    UPDATE_SHIPPING(state, payload) {
+
+      if (payload == 'FREE') {
+        state.shipping = false;
+      } else {
+        state.shipping = parseInt(payload);
+      }
+    },
+
+    ADD_ADDRESS(state, payload) {
+      state.address = payload;
+      state.gift = false;
+    },
+    
+    ADD_GIFT(state,payload){
+      state.address = '';
+      state.gift = payload;
+    },
+    //Discounts
+
+    ADD_COUPON(state, payload) {
+      state.coupon = payload;
+    },
+    UPDATE_DISCOUNT(state, payload) {
+      state.discount = payload;
+    },
+    REMOVE_DISCOUNT(state) {
+      state.discount = 0;
+      state.coupon = false;
+    },
+    RESET_SHIPPING(state){
+      state.address = '';
+      state.gift = false;
+      state.shipping = 0;
+    }
+
+
+
+
+  }

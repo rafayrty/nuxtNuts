@@ -1,10 +1,12 @@
 <template>
        <div :dir="$dir()">
+                   <vue-confirm-dialog></vue-confirm-dialog>
+
  <HeaderMain/>
 <div class="main mt-6">
 <div class="container cart-container ">
 
-<div class="content">
+<div class="content mb-12">
 
 
     <Nuxt />
@@ -16,13 +18,14 @@
 <aside class="mt-12">
 <div class="cart-details px-7 py-6 bg-green-100">
 <div class="cart-coupon">
+    <form action="" @submit.prevent="applyCoupon">
 <transition name="slide-fade">
 
 <div key="0" class="coupon-input" v-if="!couponApplied">  
     <label for="coupon" class="text-md">{{$t('cart.apply_coupon')}}</label>
     <div class="input flex jutsify-center mt-1">
-    <input type="text" v-model="coupon" :placeholder="$t('cart.coupon')" name="coupon" class="w-full px-2" id="">
-    <button class="bg-green-500 font-semibold py-2 px-4 text-white ml-2 hover:bg-green-800 cursor-pointer" @click="applyCoupon()">{{$t('cart.apply')}}</button>
+    <input type="text" required v-model="coupon" :placeholder="$t('cart.coupon')" name="coupon" class="w-full px-2" id="">
+    <button type="submit" class="bg-green-500 font-semibold py-2 px-4 text-white ml-2 hover:bg-green-800 cursor-pointer">{{$t('cart.apply')}}</button>
     </div>
 
 </div>
@@ -42,7 +45,7 @@
 </div>
 
 </transition>
-
+</form>
 <div class="order-summary mt-8">
 <h4 class="font-bold text-lg">{{$t('cart.summary')}}</h4>
 

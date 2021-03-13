@@ -19,7 +19,8 @@
                 basketImage:'',
                 totalSelected:0,
                 completed:false,
-                loading:false
+                loading:false,
+                toggle:false
             }
         },
          watch:{
@@ -187,6 +188,24 @@ removeProduct(id){
 showWrapping(){
 this.$emit('tab3');
 },
+showBasket(){
+   
+    if(this.toggle==false){
+        this.toggle = true;
+    gsap.set('.basket-addition',{bottom:"-85%"});
+    gsap.to('.basket-addition',{ease:"power3.easeIn",bottom:'-25%',duration:.8});
+    // document.querySelector('body').style.overflowY = "hidden";
+    }else{
+        this.toggle = false;
+    // document.querySelector('body').style.overflowY = "auto";
+    gsap.to('.basket-addition',{ease:"power3.easeOut",bottom:'-85%',duration:.4});
+}
+
+
+
+},
+
+
     }
     }
     </script>
@@ -236,8 +255,14 @@ this.$emit('tab3');
 
     </div>
 
-    <div class="basket-addition  shadow-lg rounded-2xl">
-        <div class="button">
+    <div class="basket-addition mt-12 lg:mt-0 shadow-lg rounded-2xl" >
+
+<div  class="bg-green-500 text-center py-4 block w-full rounded-t-lg lg:hidden" id="tap">
+<a href="javascript:void(0)" @click="showBasket()" class="w-32 hover:shadow-none transition duration-500 h-4 block bg-white text-center mx-auto shadow-xl rounded-full">
+</a>
+</div>
+        
+        <div class="button mt-6">
 
 <button :class="{'active-wrap':completed}"  :disabled="!completed" @click="showWrapping()"> {{$t('baskets.choose_wrapping')}} </button>
 
@@ -294,6 +319,7 @@ this.$emit('tab3');
 <div class="basket-image">
     <img :src="basket.image" class="w-full text-center" alt="">
 </div>
+
     </div>
     
     </div>
@@ -305,11 +331,10 @@ this.$emit('tab3');
 .basket-addition{
     position:sticky;
     width:100%;
-    top:0;
     background:#fff;
-    padding:2rem 0rem;
     margin-left:1rem;
     height:95vh;
+    top:0;
 }
 .basket-addition-wrapper{
     max-width:50%;
@@ -360,5 +385,11 @@ this.$emit('tab3');
     border-color: #fdebdb!important;
     box-shadow: 0 0 0 10px #fcefdb!important;
 }
-
+@media only screen and (max-width:768px){
+    .basket-addition{
+        height:auto;
+        top:auto;
+        bottom:-85%;
+    }
+}
 </style>

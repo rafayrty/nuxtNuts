@@ -18,14 +18,23 @@
 <div class="col lg:grid grid-cols-2 gap-x-8 ">
 
     <div class="form-group mt-4">
-     <label for="first_name">First Name</label>
-     <input type="text" v-model="first_name" class="w-full" placeholder="First Name">
+     <label for="first_name">{{$t('form.first_name')}}</label>
+     <input type="text" :class="{'error-input':errors.first_name}" @input="errors.first_name = false" v-model="first_name" class="w-full" :placeholder="$t('firstname_placeholder')">
+            <!-- Error --> 
+    <transition name="slide-fade">
+     <span class="text-red-500 font-bold text-md" v-if="errors.first_name">{{errors.first_name[0]}}</span>
+     </transition>
+     <!-- Error -->
     </div>
     <div class="form-group mt-4">
-        <label for="last_name">Last Name</label>
-        <input type="text" v-model="last_name" class="w-full" placeholder="Last Name">
+     <label for="last_name">{{$t('form.last_name')}}</label>
+        <input type="text" :class="{'error-input':errors.last_name}" @input="errors.last_name = false"  v-model="last_name" class="w-full" :placeholder="$t('lastname_placeholder')">
+        <!-- Error --> 
+    <transition name="slide-fade">
+     <span class="text-red-500 font-bold text-md" v-if="errors.last_name">{{errors.last_name[0]}}</span>
+     </transition>
+     <!-- Error -->
     </div>
-
 
 
 </div>
@@ -34,24 +43,38 @@
 <div class="col lg:grid grid-cols-2 gap-x-8">
 
     <div class="form-group mt-4">
-     <label for="first_name">Phone</label>
-     <input type="tel" v-model="phone" class="w-full" placeholder="Phone">
+    <label for="phone">{{$t('form.phone')}}</label>
+     <input type="tel" :class="{'error-input':errors.phone}" @input="errors.phone = false"   v-model="phone" class="w-full" :placeholder="$t('Phone_placeholder')">
+        <!-- Error --> 
+    <transition name="slide-fade">
+    <span class="text-red-500 font-bold text-md" v-if="errors.phone">{{errors.phone[0]}}</span>
+    </transition>
+     <!-- Error -->
     </div>
     <div class="form-group mt-4">
-        <label for="cities">Cities</label>
-<select name="city" class="w-full border border-gray-200 py-2 bg-blue-100 text-gray-500 font-semibold" v-model="city" id="">
-    <option value="0">Select A City</option>
-<option v-for="citi in cities" :value="citi.id" :key="citi.id">{{citi.name}}</option>
+        <label for="cities">{{$t('form.cities')}}</label>
+<select name="city" :class="{'error-input':errors.city}" @change="errors.city = false" class="w-full border border-gray-200 py-3" v-model="city" id="">
+    <option value="0">{{$t('form.select_city')}}</option>
+<option v-for="citi in cities" :value="citi.city_id" :key="citi.city_id">{{citi.name}}</option>
 </select>
+        <!-- Error --> 
+    <transition name="slide-fade">
+     <span class="text-red-500 font-bold text-md" v-if="errors.city">{{errors.city[0]}}</span>
+     </transition>
+     <!-- Error -->
     </div>
 
 </div>
 
 <div class="form-group mt-4">
-         <label for="Address">Address</label>
-    <textarea name="" v-model="address" id="" class="w-full" cols="30" rows="2"></textarea>
+    <label for="Address">{{$t('form.address')}}</label>
+    <textarea name="" :class="{'error-input':errors.address}" @input="errors.address = false" :placeholder="$t('address_placeholder')"  v-model="address" id="" class="w-full" cols="30" rows="2"></textarea>
+     <!-- Error --> 
+    <transition name="slide-fade">
+     <span class="text-red-500 font-bold text-md" v-if="errors.address">{{errors.address[0]}}</span>
+     </transition>
+     <!-- Error -->
 </div>
-
 <div class="address mt-4">
 
  <GmapAutocomplete @place_changed="setPlace">
@@ -76,14 +99,24 @@
 
 <div class="save lg:w-7/12 mx-auto mt-6">
 
-<button type="submit" :disabled="loading" class="bg-green-500 cursor-pointer flex justify-center items-center font-semibold py-4 px-2 text-white hover:bg-green-800 transition duration-200 text-xl w-full ">
-    
-    <svg v-if="loading" class="animate-spin rtl:ml-3 ltr:mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+<button type="submit" :disabled="loading" class="group font-bold text-xl transition duration-300 relative w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md text-white submit-login bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+<span class="absolute left-0 inset-y-0 flex items-center pl-3">
+
+<svg class="h-5 w-5 text-white-500 group-hover:text-white"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+</svg>
+
+</span>
+
+
+    {{$t('form.save')}}
+    <svg v-if="loading" class="animate-spin rtl:mr-3 ltr:ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg> 
 
-    {{$t('form.save')}}</button>
+</button>
 </div>
 
 </form>
@@ -115,6 +148,7 @@ export default {
     async asyncData(context){
 try{
     let cities = await context.app.$axios.$get(`/api/address/mobShipping/${context.app.i18n.locale}`);
+    console.log(cities);
     return { cities };
 }catch(e){
     context.error(e);
@@ -131,7 +165,8 @@ try{
     lat:'',
     lng:'',
     place_id:'',
-    loading:false
+    loading:false,
+    errors:[]
         }
     },
     methods:{
@@ -164,6 +199,7 @@ try{
     return value;
 },
         fetchAddress(lat,lng){
+        let loader = this.$loading.show();
       var self = this;
 
            fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyA3xZMib4wH3ZYtLCXd3OdLBqMkXg_xi-0&region=IL&language=he`)
@@ -185,11 +221,10 @@ try{
      method: "GET",
      headers: {"Content-type": "application/json;charset=UTF-8",'apikey':"5f11c0d0f1dad"}
    }).then(function(data){
-       
+         loader.hide();
        if(data.message=="City Not Found"){
          city = "";
          self.$toast.show(self.$i18n.t('messages.address_error'),{type:'error',duration:1500});
-
         // self.presentToast(self.translate.instant("WARNINGS.delivery"),"danger");
        }else{
                        self.address = address;    
@@ -204,6 +239,7 @@ try{
            })
        },
        insert(){
+           
            this.loading = true;
            let formData = new FormData();
            formData.append('user_id',this.$store.getters['auth/user'].id);
@@ -216,13 +252,47 @@ try{
            formData.append('city',this.city)
            formData.append('address',this.address);
 
-           this.$axios.$post('/api/auth/addresses',formData).then(res=>{
+
+
+
+           this.$axios.$post('/api/giftVerify',formData).then(res=>{
                this.loading = false;
-               this.$toast.show('Address Added Successfully',{type:'success',duration:3000});
-               this.$router.back()
-           }).catch(e=>{
-               console.log(e.data);
-               this.loading = false
+               this.$toast.show('Gift Address Added Successfully',{type:'success',duration:3000});
+
+
+              let data = {
+                   first_name:this.first_name,
+                   last_name:this.last_name,
+                   phone:this.phone,
+                   lat:this.lat,
+                   lng:this.lng,
+                   place_id:this.place_id,
+                   city:this.city,
+                   address:this.address
+               };
+               this.$store.dispatch('cart/addGift',data).then(res=>{
+                   this.loading = false;
+                   this.$router.back()
+               });
+
+           }).catch(err=>{
+
+        this.loading = false;
+        if (err.response.status == 422) {
+
+          this.errors = err.response.data.errors;
+          this.$toast.show('Authentication Error Occurred', {
+            type: 'error',
+            duration: 3000
+          });
+        } else {
+          this.$toast.show(`An Unknown Error ${err.response.status} Occurred`, {
+            type: "error",
+            duration: 3000
+          });
+        }
+
+
            })
        }
     }

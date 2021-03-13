@@ -14,7 +14,8 @@ export const actions = {
        try {
            
         await this.$axios.$get(`/api/products/${id}/${this.$i18n.locale}`).then(res=>{
-          commit('ADD_RECENTLY',res[0]);
+          commit('ADD_RECENTLY',res);
+          console.log("fromt store",res);
 
       });
       } catch (err) {
@@ -43,7 +44,12 @@ export const actions = {
 
 export const mutations = {
        ADD_RECENTLY(state,payload){
+         if(state.recently.length!=8){
            state.recently.push(payload)
+         }
+         if(state.recently.length==8){
+           state.recently.splice(0,1);
+         }
 
        },
        UPDATE_RECENTLY(state,payload){
@@ -51,9 +57,14 @@ export const mutations = {
 
        },
        ADD_ID(state,payload){
-    
-        state.ids.push(payload);
-        state.ids = [...new Set(state.ids)]
+        if(state.ids.length!=8){
+          state.ids.push(payload);
+          state.ids = [...new Set(state.ids)]
+        }
+        if(state.ids.length==8){
+          state.ids.splice(0,1);
+        }
+
     }
     
 }

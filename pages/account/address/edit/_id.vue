@@ -54,9 +54,9 @@
     </div>
     <div class="form-group mt-4">
         <label for="cities">{{$t('form.cities')}}</label>
-<select name="city" :class="{'error-input':errors.city}" @change="errors.city = false" class="w-full border border-gray-200 py-3 bg-blue-100 text-gray-500 font-semibold" v-model="address.city" id="">
+<select name="city" :class="{'error-input':errors.city}" @change="errors.city = false" class="w-full border border-gray-200 py-3" v-model="address.city" id="">
     <option value="0">{{$t('form.select_city')}}</option>
-<option v-for="citi in cities" :value="citi.id" :key="citi.id">{{citi.name}}</option>
+<option v-for="citi in cities" :value="citi.city_id" :key="citi.city_id">{{citi.name}}</option>
 </select>
         <!-- Error --> 
     <transition name="slide-fade">
@@ -134,18 +134,19 @@ export default {
     name: 'main'
   },
   async asyncData(context) {
-    console.log(context.app.params)
     try {
-          const [address, cities] = await Promise.all([ 
-    $axios.get('/api/address/mobShipping/${context.app.i18n.locale}'),
-    $axios.get('/api/auth/address/edit/${context.params.id}'),
-  ])
+      let id = context.params.id;
+  //         const [address, cities] = await Promise.all([ 
+  //   context.app.$axios.get(`/api/address/mobShipping/${context.app.i18n.locale}`),
+  //   context.app.$axios.get(`/api/auth/address/edit/${context.app.params.id}`),
+  // ])
 
-    //   let cities = await context.app.$axios.$get(`/api/address/mobShipping/${context.app.i18n.locale}`);
-    //   let address = await context.app.$axios.$get(`/api/auth/address/edit/${context.params.id}`);
+      let cities = await context.app.$axios.$get(`/api/address/mobShipping/${context.app.i18n.locale}`);
+      let address = await context.app.$axios.$get(`/api/auth/address/edit/${context.params.id}`);
+      console.log(cities);
   return {
-    cities: cities.data,
-    address: address.data,
+    cities: cities,
+    address: address,
   }
   
   } catch (e) {
@@ -198,6 +199,7 @@ export default {
       return value;
     },
     fetchAddress(lat, lng) {
+      let loader = this.$loading.show();
       var self = this;
 
       fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyA3xZMib4wH3ZYtLCXd3OdLBqMkXg_xi-0&region=IL&language=he`)

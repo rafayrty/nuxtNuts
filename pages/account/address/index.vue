@@ -116,7 +116,24 @@ export default {
   },
   methods: {
     async deleteAddress(id, index) {
-        this.addresses.splice(index, 1);
+
+      this.$confirm({
+          auth: false,
+          title: 'Are you sure?',
+          message: `You Want To Delete This Address`,
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+        callback: (confirm) =>{
+          if(confirm){
+            this.addresses.splice(index, 1);
+          }
+        }
+       
+      })
+
+
     //  await this.$axios.$get(`/api/auth/address/delete/${id}`);
     }
   }

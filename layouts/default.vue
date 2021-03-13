@@ -1,5 +1,7 @@
 <template>
   <div :dir="$dir()">
+            <vue-confirm-dialog></vue-confirm-dialog>
+
     <HeaderMain/>
 
     <Nuxt />

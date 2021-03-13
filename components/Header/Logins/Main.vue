@@ -1,7 +1,7 @@
 <template>
 <div class="main-modals">
 
-       <modal name="account-modal" @before-close="closed" @opened="opened" :classes="['main-modal-window']" :width="'600'" :height="'auto'" :scrollable='true' :adaptive="true" >
+       <modal name="account-modal" @before-close="closed" @opened="opened" :classes="['main-modal-window']" :width="'400'" :height="'auto'" :scrollable='true' :adaptive="true" >
 
   <perfect-scrollbar ref="scroll">
 
@@ -105,6 +105,8 @@
 }
 </style>
 <script>
+import Login from './Login'
+import Register from './Register'
 
 export default {
     data(){
@@ -114,6 +116,8 @@ export default {
         }
     },
        components: {
+         Login,
+         Register,
       VFacebookLogin: () =>
         process.client ? import('vue-facebook-login-component') : null,
     },
@@ -157,8 +161,27 @@ try {
         const googleUser = await this.$gAuth.signIn();
         if (!googleUser) {
           return null;
-        }console.log("googleUser",googleUser)
-        console.log("googleUser", googleUser.Es.bT,googleUser.Es.dR,googleUser.Es.kt);
+        }
+         console.log("googleUser",googleUser.getId());
+         console.log("getBasicProfile", googleUser.getBasicProfile());
+
+        let formData = new FormData();
+
+        formData.append('reg_first_name',googleUser.getBasicProfile().QS);
+        formData.append('reg_last_name',googleUser.getBasicProfile().SQ);
+        formData.append('reg_email',googleUser.getBasicProfile().nt);
+        let loader = this.$loading.show();
+        this.$store.dispatch('auth/googleLogin',formData).then(res=>{
+
+         this.$toast.show('Authenticated',{type:'info',duration:3000})
+         this.$axios.setToken(res.access_token, 'Bearer')
+         this.$router.push(this.localePath({path:'account/profile'}));
+
+          loader.hide();
+          this.hide();
+        });
+
+        // console.log("googleUser", googleUser.Es.bT,googleUser.Es.dR,googleUser.Es.kt);
         // console.log("getId", googleUser.getId());
         // console.log("getBasicProfile", googleUser.getBasicProfile());
         // console.log("getAuthResponse", googleUser.getAuthResponse());
@@ -166,6 +189,9 @@ try {
           "getAuthResponse",
           this.$gAuth.GoogleAuth.currentUser.get().getAuthResponse()
         );
+        
+
+
         this.isSignIn = this.$gAuth.isAuthorized;
       } catch (error) {
         //on fail do something

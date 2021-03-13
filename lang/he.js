@@ -121,6 +121,7 @@ export default {
       "items": "פריטים",
       "order": "להזמין:",
       "cancel": "בטל הזמנה",
+      "invoice":"חשבונית מס",
       "profile": "הפרופיל שלי",
       "add_new": "הוסף כתובת חדשה",
       "no_orders": "אין הזמנות",

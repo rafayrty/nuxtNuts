@@ -54,9 +54,9 @@
     </div>
     <div class="form-group mt-4">
         <label for="cities">{{$t('form.cities')}}</label>
-<select name="city" :class="{'error-input':errors.city}" @change="errors.city = false" class="w-full border border-gray-200 py-3 bg-blue-100 text-gray-500 font-semibold" v-model="city" id="">
+<select name="city" :class="{'error-input':errors.city}" @change="errors.city = false" class="w-full border border-gray-200 py-3" v-model="city" id="">
     <option value="0">{{$t('form.select_city')}}</option>
-<option v-for="citi in cities" :value="citi.id" :key="citi.id">{{citi.name}}</option>
+<option v-for="citi in cities" :value="citi.city_id" :key="citi.city_id">{{citi.name}}</option>
 </select>
         <!-- Error --> 
     <transition name="slide-fade">
@@ -186,6 +186,7 @@ try{
     return value;
 },
         fetchAddress(lat,lng){
+      let loader = this.$loading.show();
       var self = this;
 
            fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyA3xZMib4wH3ZYtLCXd3OdLBqMkXg_xi-0&region=IL&language=he`)
@@ -207,6 +208,7 @@ try{
      method: "GET",
      headers: {"Content-type": "application/json;charset=UTF-8",'apikey':"5f11c0d0f1dad"}
    }).then(function(data){
+     loader.hide();
        
        if(data.message=="City Not Found"){
          self.city = "0";

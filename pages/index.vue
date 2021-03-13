@@ -18,28 +18,63 @@
 
           <div class="left col-start-1	col-end-5">
 
-            <div class="slider shadow-lg	 grid grid-cols-2 gap-x-6	bg-white items-center rounded lg:border-green-500 lg:border-2	">
+            <div class="slider shadow-lg	 	bg-white  rounded lg:border-green-500 lg:border-2	">
+<flickity ref="flickity" :options="flickityOptions">
+  <div class="carousel-cell ">
+<div class="grid grid-cols-2 gap-x-6 items-center">
 
               <div class="slider-image h-full">
                 <img src="~/assets/images/slider.png" class="w-full  h-full object-cover" alt="">
 
               </div>
 
-              <div class="slider-text py-6">
+              <div class="slider-text flex h-full flex-col items-start justify-around py-6">
 
-
-                <span class="chip inline-block bg-green-200 text-green-500 px-2">
+<div>
+             <span class="chip cursor-pointer hover:bg-blue-100  inline-block bg-green-200 text-green-500 px-2">
                   <b>Category Name</b>
                 </span>
-                <h1 class="font-bold py-4">Pellentesque sem molestie non massa velit et vitae dignissim.</h1>
+                                <h1 class="font-bold py-4">Pellentesque sem molestie non massa velit et vitae dignissim.</h1>
 
-                <button
-                  class="bg-blue-500 mt-4 w-full hover:bg-blue-700 transition cursor-pointer text-white p-2 px-4 font-semibold	">Call
-                  to action</button>
+</div>
+   
+
+<button class="bg-blue-500 mt-4 w-full hover:bg-blue-700 transition cursor-pointer text-white p-2 py-3 px-4 font-semibold	">Call to action</button>
               </div>
 
 
+</div>
 
+</div>
+  <div class="carousel-cell ">
+<div class="grid grid-cols-2 gap-x-6 items-center">
+
+              <div class="slider-image h-full">
+                <img src="~/assets/images/slider.png" class="w-full  h-full object-cover" alt="">
+
+              </div>
+
+              <div class="slider-text flex h-full flex-col items-start justify-around py-6">
+
+<div>
+             <span class="chip cursor-pointer hover:bg-blue-100  inline-block bg-green-200 text-green-500 px-2">
+                  <b>Category Name</b>
+                </span>
+                                <h1 class="font-bold py-4">Pellentesque sem molestie non massa velit et vitae dignissim.</h1>
+
+</div>
+   
+
+<button class="bg-blue-500 mt-4 w-full hover:bg-blue-700 transition cursor-pointer text-white p-2 py-3 px-4 font-semibold	">Call to action</button>
+              </div>
+
+
+</div>
+
+</div>
+
+
+</flickity>
 
 
             </div>
@@ -68,7 +103,7 @@
         <div class="display-products mt-10">
           <div class="display-title">
             <h3>{{$t('fresh')}}</h3>
-            <p><nuxt-link :to="localePath(`/fresh`)">{{$t('view')}} ></nuxt-link></p>
+            <p><nuxt-link :to="localePath(`/fresh?page=1`)">{{$t('view')}} ></nuxt-link></p>
           </div>
           <hr class="bg-green-500" style="height:0.05rem;margin-top: -0.1rem;">
           <div class="products-container" v-if="freshToday.length">
@@ -147,18 +182,18 @@
             <p><a href="#">{{$t('view')}} ></a></p>
           </div>
           <hr class="bg-green-500" style="height:0.05rem;margin-top: -0.1rem;">
-          <div class="products-container">
+         <div class="products-container" v-if="recentlyProducts.length">
 
 
-            <div class="product" v-for="recently in recentlyProducts" :key="recently.id">
-              <nuxt-link :to="localePath(`/product/${recently.id}`)" >
+            <div class="product"  v-for="recently in recentlyProducts" :key="recently.id">
 
               <div class="product-image">
-                <img :src="recently.image" v-shared-element:[illusoryId(recently.id)]  alt="">
-                                <span class="gm" v-if="recently.kind==0">100 {{$t('gm')}}</span>
+              <nuxt-link :to="localePath(`/product/${recently.id}`)" >
+               <img :src="recently.image"  v-shared-element:[illusoryId(recently.id)] alt="">   </nuxt-link>
+                <!-- <span class="gm"  v-if="fresh.kind==0">100 {{$t('gm')}}</span> -->
+                             
 
               </div>
-              </nuxt-link>
               <div class="product-text">
 
                 <div class="product-categories">
@@ -166,7 +201,7 @@
                       Nuts</a></span>
                 </div>
                 <div class="product-title">
-                  <h4>{{recently.name}}</h4>
+                <h4>  {{recently.name}}</h4>
                 </div>
                 <div class="actions">
                   <div class="price">
@@ -199,6 +234,12 @@
 
 
             </div>
+
+
+
+   
+
+
 
           </div>
 
@@ -275,6 +316,27 @@
 
 </template>
 <style>
+.carousel-cell{
+  width:100%;
+  height:auto;
+}
+.flickity-slider {
+  transform: none !important;
+}
+
+.carousel-cell {
+  left: 0 !important;
+  opacity: 0;
+  transform:translateX(-10px);
+  transition: all 0.3s ease-in-out;
+  z-index: -1;
+}
+
+.carousel-cell.is-selected {
+  opacity: 1;
+  transform:translateX(0px);
+  z-index: 0
+}
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .slide-fade-enter-active {
@@ -290,10 +352,29 @@
 }
 </style>
 <script>
+import Flickity from 'vue-flickity';
+
 
 export default {
+   components: {
+    Flickity
+  },
+   data() {
+    return {
+      flickityOptions: {
+        initialIndex: 1,
+        pageDots: true,
+        wrapAround: true,
+        fade: true,
+        adaptiveHeight: true
+
+
+        
+        // any options from Flickity can be used
+      }
+    }
+  },
   async asyncData(context) {
-    const id = context.params.id
         try {
       // Using the nuxtjs/http module here exposed via context.app
       const freshToday = await context.app.$axios.$get(
@@ -304,14 +385,15 @@ export default {
       context.error(e) // Show the nuxt error page with the thrown error
     }
   },
+    created(){
+    console.log("recent prds",this.$store.getters['recently/getRecentProducts']);
+  },
   computed:{
   recentlyProducts(){
     return this.$store.getters['recently/getRecentProducts'];
   }
   },
-  mounted(){
-    console.log("recent prds",this.$store.getters['recently/getRecentProducts']);
-  },
+
   methods:{
     illusoryId(id){
       return "product_"+id;

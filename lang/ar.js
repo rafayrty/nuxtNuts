@@ -123,6 +123,7 @@ export default{
       "items": "العناصر",
       "order": "طلب:",
       "cancel": "الغاء الطلب",
+      "invoice":"فاتورة",
       "profile": "ملفي",
       "add_new": "أضف عنوانا جديدا",
       "no_orders": "لا توجد طلبات",
