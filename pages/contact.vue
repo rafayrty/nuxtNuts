@@ -102,7 +102,7 @@
 
     </div>
 </template>
-<style>
+<style scoped>
 .form-container{
     grid-template-columns: .6fr 1fr;
 }

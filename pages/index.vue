@@ -374,7 +374,8 @@ export default {
         fade: true,
         adaptiveHeight: true,
         prevNextButtons: false,
-        lazyLoad: true
+        lazyLoad: true,
+        draggable: false
 
 
         
